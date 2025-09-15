@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { UIPreview } from '@/components/ui-preview';
 import { CodeDisplay } from '@/components/code-display';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useEffect } from 'react';
 
 const themes = [
   'Modern', 
@@ -87,33 +88,42 @@ export function GeneratorTab() {
   };
   
   const handleSurprise = () => {
+    // These `useEffect` calls will run after the state is set,
+    // which is not what we want for an immediate action.
+    // We should construct the prompt and call `handleGenerate` directly.
     const randomTheme = themes[Math.floor(Math.random() * themes.length)];
     const randomComponent = componentTypes[Math.floor(Math.random() * componentTypes.length)];
     const surprisePrompt = `A ${randomTheme.toLowerCase()} ${randomComponent.toLowerCase()} for a website.`;
+    
+    // Set the state for the UI to reflect the change
     setPrompt(surprisePrompt);
     setSelectedTheme(randomTheme);
     setSelectedComponent(randomComponent);
+
+    // Immediately trigger generation with the new prompt
     handleGenerate(surprisePrompt);
   };
 
-  const updatePrompt = (theme: string, component: string) => {
-    if (theme && component) {
-        setPrompt(`A ${theme.toLowerCase()} ${component.toLowerCase()} for a website.`);
-    } else if (theme) {
-        setPrompt(`A UI with a ${theme.toLowerCase()} theme.`);
-    } else if (component) {
-        setPrompt(`A ${component.toLowerCase()} UI component.`);
+  useEffect(() => {
+    const updatePrompt = () => {
+      if (selectedTheme && selectedComponent) {
+        setPrompt(`A ${selectedTheme.toLowerCase()} ${selectedComponent.toLowerCase()} for a website.`);
+      } else if (selectedTheme) {
+        setPrompt(`A UI with a ${selectedTheme.toLowerCase()} theme.`);
+      } else if (selectedComponent) {
+        setPrompt(`A ${selectedComponent.toLowerCase()} UI component.`);
+      }
     }
-  }
+    updatePrompt();
+  }, [selectedTheme, selectedComponent]);
+
 
   const handleThemeChange = (value: string) => {
     setSelectedTheme(value);
-    updatePrompt(value, selectedComponent);
   }
 
   const handleComponentChange = (value: string) => {
     setSelectedComponent(value);
-    updatePrompt(selectedTheme, value);
   }
 
   return (
