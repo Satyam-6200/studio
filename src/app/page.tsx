@@ -9,7 +9,7 @@ export default function Home() {
       <AppHeader />
       <main className="flex-grow">
         <section className="relative flex h-full flex-col items-center justify-center px-4 py-20 text-center">
-          <div className="absolute inset-0 -z-10 h-full w-full bg-background bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]"></div>
+          <div className="absolute inset-0 -z-10 h-full w-full bg-background bg-[radial-gradient(hsl(var(--muted))_1px,transparent_1px)] [background-size:16px_16px]"></div>
           <div className="relative z-10">
             <h1 className="text-5xl font-bold font-headline bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70 pb-4 md:text-7xl">
               Build UIs with CORRECTED UI
@@ -24,6 +24,9 @@ export default function Home() {
                 </Button>
               </Link>
             </div>
+          </div>
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
+            <div className="h-24 w-80 bg-background bg-[radial-gradient(hsl(var(--muted))_1.5px,transparent_1.5px)] [background-size:16px_16px] [mask-image:linear-gradient(to_bottom,transparent,black_50%,transparent)]"></div>
           </div>
         </section>
       </main>
