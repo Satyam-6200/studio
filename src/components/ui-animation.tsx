@@ -40,7 +40,8 @@ export function UiAnimation() {
           rotateX,
           rotateY,
         }}
-        transition={{ type: "spring", stiffness: 100, damping: 20 }}
+        whileHover={{ scale: 0.5 }}
+        transition={{ type: "spring", stiffness: 300, damping: 10, mass: 0.5 }}
       >
         <Image
           src="https://picsum.photos/seed/future-ui/800/800"
