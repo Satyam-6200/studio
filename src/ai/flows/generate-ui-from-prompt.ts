@@ -19,8 +19,7 @@ const GenerateUiCodeInputSchema = z.object({
 export type GenerateUiCodeInput = z.infer<typeof GenerateUiCodeInputSchema>;
 
 const GenerateUiCodeOutputSchema = z.object({
-  html: z.string().describe('The generated HTML code.'),
-  css: z.string().describe('The generated CSS code.'),
+  html: z.string().describe('The generated HTML code using Tailwind CSS.'),
 });
 export type GenerateUiCodeOutput = z.infer<typeof GenerateUiCodeOutputSchema>;
 
@@ -32,17 +31,18 @@ const prompt = ai.definePrompt({
   name: 'generateUiCodePrompt',
   input: {schema: GenerateUiCodeInputSchema},
   output: {schema: GenerateUiCodeOutputSchema},
-  prompt: `You are an AI expert in UI/UX design.
+  prompt: `You are an AI expert in UI/UX design and Tailwind CSS.
 
-  You will generate HTML and CSS code based on the user's prompt.
+  You will generate a single block of HTML code based on the user's prompt.
+  The HTML should be styled using Tailwind CSS classes.
+  Do not include any <style> tags or separate CSS.
   Ensure the code is responsive and well-structured.
 
   Prompt: {{{prompt}}}
 
-  Return the HTML and CSS code in the following format:
+  Return only the HTML code in the following format:
   {
-    "html": "...",
-    "css": "..."
+    "html": "..."
   }`,
 });
 

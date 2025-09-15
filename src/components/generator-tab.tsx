@@ -17,7 +17,7 @@ export function GeneratorTab() {
   const { toast } = useToast();
   const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
-  const [generatedCode, setGeneratedCode] = useState<{ html: string; css: string } | null>(null);
+  const [generatedCode, setGeneratedCode] = useState<{ html: string } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -77,7 +77,7 @@ export function GeneratorTab() {
         {generatedCode && (
           <div className="flex flex-col gap-4">
              <h3 className="font-headline text-lg font-semibold">Export Code</h3>
-            <CodeDisplay html={generatedCode.html} css={generatedCode.css} />
+            <CodeDisplay html={generatedCode.html} />
           </div>
         )}
       </div>
@@ -92,7 +92,7 @@ export function GeneratorTab() {
                 </div>
             </div>
         ) : generatedCode ? (
-          <UIPreview html={generatedCode.html} css={generatedCode.css} />
+          <UIPreview html={generatedCode.html} />
         ) : (
             <div className="flex h-full min-h-[400px] items-center justify-center">
                 <div className="text-center text-muted-foreground">
