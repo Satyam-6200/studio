@@ -1,9 +1,36 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 import Image from "next/image";
 
 export function UiAnimation() {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const rotateX = useTransform(y, [-300, 300], [10, -10]);
+  const rotateY = useTransform(x, [-300, 300], [-10, 10]);
+
+  const handleMouseMove = (event: React.MouseEvent) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+
+    x.set(xPct * width);
+    y.set(yPct * height);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+
   return (
     <div
       className="relative hidden h-[500px] w-full max-w-lg items-center justify-center lg:flex"
@@ -17,15 +44,12 @@ export function UiAnimation() {
         className="relative h-[400px] w-[640px] rounded-xl shadow-2xl bg-card/50 p-4 border border-border"
         style={{ 
           transformStyle: "preserve-3d",
+          rotateX,
+          rotateY
         }}
-        animate={{
-            rotateY: [0, 360],
-        }}
-        transition={{ 
-            duration: 20, 
-            repeat: Infinity, 
-            ease: "linear" 
-        }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        transition={{ type: "spring", stiffness: 350, damping: 40 }}
       >
         <div 
           className="absolute inset-0 opacity-10"
