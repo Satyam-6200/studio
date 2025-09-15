@@ -20,7 +20,7 @@ export default function Home() {
           ></div>
           <div className="relative z-10">
             <h1 className="text-5xl md:text-7xl font-bold font-headline bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70 pb-4">
-              Build UIs with CORRECTE UI
+              Build UIs with CORRECTED UI
             </h1>
             <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto text-muted-foreground">
               An AI-powered platform to generate, optimize, and discover beautiful UI components for your next project.
