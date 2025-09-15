@@ -1,6 +1,22 @@
+"use client";
+
 import { Logo } from '@/components/icons/logo';
+import { useAuth } from '@/hooks/use-auth';
+import { Button } from '@/components/ui/button';
+import { usePathname, useRouter } from 'next/navigation';
 
 export function AppHeader() {
+  const { user, signOut } = useAuth();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push('/login');
+  };
+  
+  const showAuthButton = pathname.includes('/dashboard');
+
   return (
     <header className="border-b bg-transparent">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -11,6 +27,11 @@ export function AppHeader() {
               CORRECTED UI
             </h1>
           </div>
+          {showAuthButton && user && (
+            <div className="ml-auto">
+              <Button variant="outline" onClick={handleSignOut}>Logout</Button>
+            </div>
+          )}
         </div>
       </div>
     </header>

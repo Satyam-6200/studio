@@ -12,12 +12,13 @@ import { useRouter } from "next/navigation";
 import { useState, FormEvent, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-export default function LoginPage() {
-  const { user, signInWithEmail } = useAuth();
+export default function SignupPage() {
+  const { user, signUpWithEmail } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   useEffect(() => {
     if (user) {
@@ -25,15 +26,23 @@ export default function LoginPage() {
     }
   }, [user, router]);
 
-  const handleLogin = async (e: FormEvent) => {
+  const handleSignup = async (e: FormEvent) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      toast({
+        variant: "destructive",
+        title: "Signup Failed",
+        description: "Passwords do not match.",
+      });
+      return;
+    }
     try {
-      await signInWithEmail(email, password);
+      await signUpWithEmail(email, password);
       router.push("/dashboard");
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Login Failed",
+        title: "Signup Failed",
         description: error.message,
       });
     }
@@ -52,12 +61,12 @@ export default function LoginPage() {
       <div className="relative grid w-full max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-2">
         <Card className="w-full max-w-sm justify-self-center lg:justify-self-start z-10 border-border/50 bg-card/80 backdrop-blur-sm">
           <CardHeader className="space-y-2 text-center">
-              <Logo className="mx-auto h-8 w-8 text-primary" />
-            <CardTitle className="text-2xl font-bold font-headline">Welcome Back</CardTitle>
-            <CardDescription>Enter your email below to login to your account</CardDescription>
+            <Logo className="mx-auto h-8 w-8 text-primary" />
+            <CardTitle className="text-2xl font-bold font-headline">Create an Account</CardTitle>
+            <CardDescription>Enter your details to get started.</CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleLogin}>
+            <form onSubmit={handleSignup}>
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
@@ -71,12 +80,7 @@ export default function LoginPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <div className="flex items-center">
-                    <Label htmlFor="password">Password</Label>
-                    <Link href="#" className="ml-auto inline-block text-sm underline">
-                      Forgot your password?
-                    </Link>
-                  </div>
+                  <Label htmlFor="password">Password</Label>
                   <Input 
                     id="password" 
                     type="password" 
@@ -85,15 +89,25 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="confirm-password">Confirm Password</Label>
+                  <Input 
+                    id="confirm-password" 
+                    type="password" 
+                    required
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                </div>
                 <Button type="submit" className="w-full">
-                  Login
+                  Sign Up
                 </Button>
               </div>
             </form>
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{' '}
-              <Link href="/signup" className="underline">
-                Sign up
+              Already have an account?{' '}
+              <Link href="/login" className="underline">
+                Login
               </Link>
             </div>
           </CardContent>

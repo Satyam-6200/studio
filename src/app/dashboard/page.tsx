@@ -1,11 +1,35 @@
+"use client";
+
 import { AppHeader } from "@/components/app-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GeneratorTab } from "@/components/generator-tab";
 import { OptimizerTab } from "@/components/optimizer-tab";
 import { LibraryTab } from "@/components/library-tab";
 import { Wand2, Lightbulb, Library } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function DashboardPage() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login");
+    }
+  }, [user, loading, router]);
+
+  if (loading || !user) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <div className="text-center">
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-screen flex-col bg-background">
       <AppHeader />
@@ -14,7 +38,7 @@ export default function DashboardPage() {
           <div className="flex justify-center">
             <TabsList className="mb-6 grid grid-cols-3 w-full max-w-lg">
               <TabsTrigger value="generator" className="gap-2">
-                <Wand2 className="h-4 w-4"/> Generator
+                <Wand2 className="h-4 w-4" /> Generator
               </TabsTrigger>
               <TabsTrigger value="optimizer" className="gap-2">
                 <Lightbulb className="h-4 w-4" /> Optimizer
