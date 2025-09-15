@@ -1,6 +1,7 @@
 import { AppHeader } from '@/components/app-header';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -26,9 +27,11 @@ export default function Home() {
               An AI-powered platform to generate, optimize, and discover beautiful UI components for your next project.
             </p>
             <div className="mt-8 flex justify-center gap-4">
-              <Button size="lg" className="bg-primary hover:bg-primary/90">
-                Get Started <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+              <Link href="/login">
+                <Button size="lg" className="bg-primary hover:bg-primary/90">
+                  Get Started <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
