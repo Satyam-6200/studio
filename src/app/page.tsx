@@ -8,7 +8,7 @@ export default function Home() {
     <div className="flex h-full flex-col bg-background">
       <AppHeader />
       <main className="flex-grow">
-        <section className="relative flex h-full flex-col items-center justify-center px-4 py-20 text-center">
+        <section className="relative flex h-full flex-col items-center justify-center overflow-x-hidden px-4 py-20 text-center">
           <div className="absolute inset-0 -z-10 h-full w-full bg-background bg-[radial-gradient(hsl(var(--muted))_1px,transparent_1px)] [background-size:16px_16px]"></div>
           <div className="relative z-10">
             <h1 className="text-5xl font-bold font-headline bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70 pb-4 md:text-7xl">
@@ -25,8 +25,8 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
-            <div className="h-24 w-[1280px] bg-[radial-gradient(hsl(var(--muted))_2px,transparent_2px)] [background-size:16px_16px] [mask-image:linear-gradient(to_bottom,transparent,black_40%,transparent)]"></div>
+          <div className="absolute bottom-0 left-0 w-full">
+            <div className="h-24 w-full bg-[radial-gradient(hsl(var(--foreground))_1px,transparent_1px)] [background-size:16px_16px] [mask-image:linear-gradient(to_bottom,transparent,black_40%,transparent)]"></div>
           </div>
         </section>
       </main>
