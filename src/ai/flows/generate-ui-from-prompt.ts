@@ -32,7 +32,7 @@ const prompt = ai.definePrompt({
   name: 'generateUiCodePrompt',
   input: {schema: GenerateUiCodeInputSchema},
   output: {schema: GenerateUiCodeOutputSchema},
-  model: googleAI.model('gemini-1.5-flash-preview-0514'),
+  model: googleAI.model('gemini-1.5-flash'),
   prompt: `You are an AI expert in UI/UX design and Tailwind CSS.
 
   You will generate a single block of HTML code based on the user's prompt.
