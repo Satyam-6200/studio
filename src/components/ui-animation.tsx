@@ -1,12 +1,12 @@
 "use client";
 
-import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 export function UiAnimation() {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const springConfig = { stiffness: 350, damping: 40 };
+  const springConfig = { stiffness: 100, damping: 20 };
   const smoothX = useSpring(x, springConfig);
   const smoothY = useSpring(y, springConfig);
 
@@ -39,20 +39,28 @@ export function UiAnimation() {
       style={{
         perspective: "1000px",
       }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
-      
       <motion.div
-        className="relative h-[400px] w-[640px] rounded-xl shadow-2xl bg-card/50 p-4 border border-border"
+        className="relative h-[400px] w-[640px] rounded-xl shadow-2xl bg-card/50 p-4 border border-border overflow-hidden"
         style={{ 
           transformStyle: "preserve-3d",
           rotateX,
-          rotateY
+          rotateY,
         }}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
       >
+        <video 
+          src="/videos/hero-video.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute top-0 left-0 w-full h-full object-cover opacity-30"
+        ></video>
         <div className="absolute inset-0 bg-gradient-to-br from-background/20 via-transparent to-primary/20"></div>
-
+        <div className="absolute inset-0 bg-grid-pattern bg-grid-pattern opacity-10 [mask-image:linear-gradient(to_bottom,transparent,black_40%,transparent)]"></div>
+        
         <motion.div 
             className="w-full h-full flex items-center justify-center"
             style={{ transformStyle: "preserve-3d" }}
@@ -73,14 +81,6 @@ export function UiAnimation() {
                 <p>Design & Development</p>
             </motion.div>
         </motion.div>
-        
-        <motion.div
-            className="absolute inset-0 rounded-xl"
-            style={{
-                transform: "translateZ(100px)",
-                boxShadow: "0 0 80px 20px hsl(var(--primary) / 0.25)",
-            }}
-        />
       </motion.div>
     </div>
   );
