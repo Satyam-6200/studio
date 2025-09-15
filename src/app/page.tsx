@@ -26,7 +26,7 @@ export default function Home() {
             </div>
           </div>
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
-            <div className="h-24 w-[768px] bg-background bg-[radial-gradient(hsl(var(--muted))_1.5px,transparent_1.5px)] [background-size:16px_16px] [mask-image:linear-gradient(to_bottom,transparent,black_50%,transparent)]"></div>
+            <div className="h-24 w-[1024px] bg-background bg-[radial-gradient(hsl(var(--muted))_1.5px,transparent_1.5px)] [background-size:16px_16px] [mask-image:linear-gradient(to_bottom,transparent,black_50%,transparent)]"></div>
           </div>
         </section>
       </main>
