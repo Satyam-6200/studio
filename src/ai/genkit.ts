@@ -1,6 +1,6 @@
 import {genkit, configureGenkit} from 'genkit';
 import {googleAI} from '@genkit-ai/googleai';
-import {nextPlugin} from '@genkit-ai/next/plugin';
+import {nextPlugin} from '@genkit-ai/next';
 
 configureGenkit({
   plugins: [
