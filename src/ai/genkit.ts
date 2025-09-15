@@ -1,8 +1,10 @@
-import {genkit, configureGenkit} from 'genkit';
+'use server';
+
+import {genkit} from 'genkit';
 import {googleAI} from '@genkit-ai/googleai';
 import {nextPlugin} from '@genkit-ai/next';
 
-configureGenkit({
+export const ai = genkit({
   plugins: [
     googleAI(),
     nextPlugin({
@@ -11,8 +13,4 @@ configureGenkit({
   ],
   logLevel: 'debug',
   enableTracingAndMetrics: true,
-});
-
-export const ai = genkit({
-  model: 'googleai/gemini-2.5-flash',
 });
