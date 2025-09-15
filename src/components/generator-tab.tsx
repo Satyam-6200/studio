@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { Wand2, Loader2 } from 'lucide-react';
+import { Wand2, Loader2, Sparkles } from 'lucide-react';
 import { generateUiCode } from '@/ai/flows/generate-ui-from-prompt';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -10,6 +10,10 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { UIPreview } from '@/components/ui-preview';
 import { CodeDisplay } from '@/components/code-display';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+const themes = ['Modern', 'Minimalist', 'Playful', 'Corporate', 'Elegant', 'Futuristic'];
+const componentTypes = ['Login Form', 'Pricing Section', 'Contact Form', 'Hero Section', 'Testimonials', 'FAQ Section'];
 
 const placeholderPrompt = "A modern hero section for a SaaS startup with a title, a short paragraph, a call-to-action button, and a placeholder image on the right.";
 
@@ -18,10 +22,11 @@ export function GeneratorTab() {
   const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
   const [generatedCode, setGeneratedCode] = useState<{ html: string } | null>(null);
+  const [selectedTheme, setSelectedTheme] = useState('');
+  const [selectedComponent, setSelectedComponent] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!prompt.trim()) {
+  const handleGenerate = async (currentPrompt: string) => {
+    if (!currentPrompt.trim()) {
       toast({
         variant: "destructive",
         title: "Prompt is empty",
@@ -32,7 +37,7 @@ export function GeneratorTab() {
     setLoading(true);
     setGeneratedCode(null);
     try {
-      const result = await generateUiCode({ prompt });
+      const result = await generateUiCode({ prompt: currentPrompt });
       setGeneratedCode(result);
     } catch (error) {
       console.error(error);
@@ -46,16 +51,76 @@ export function GeneratorTab() {
     }
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handleGenerate(prompt);
+  };
+  
+  const handleSurprise = () => {
+    const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+    const randomComponent = componentTypes[Math.floor(Math.random() * componentTypes.length)];
+    const surprisePrompt = `A ${randomTheme.toLowerCase()} ${randomComponent.toLowerCase()} for a website.`;
+    setPrompt(surprisePrompt);
+    setSelectedTheme(randomTheme);
+    setSelectedComponent(randomComponent);
+    handleGenerate(surprisePrompt);
+  };
+
+  const updatePrompt = (theme: string, component: string) => {
+    if (theme && component) {
+        setPrompt(`A ${theme.toLowerCase()} ${component.toLowerCase()} for a website.`);
+    } else if (theme) {
+        setPrompt(`A UI with a ${theme.toLowerCase()} theme.`);
+    } else if (component) {
+        setPrompt(`A ${component.toLowerCase()} UI component.`);
+    }
+  }
+
+  const handleThemeChange = (value: string) => {
+    setSelectedTheme(value);
+    updatePrompt(value, selectedComponent);
+  }
+
+  const handleComponentChange = (value: string) => {
+    setSelectedComponent(value);
+    updatePrompt(selectedTheme, value);
+  }
+
   return (
     <div className="grid h-full grid-cols-1 gap-8 md:grid-cols-2 md:grid-rows-[min-content_1fr]">
       <div className="flex flex-col gap-6 md:row-span-2">
         <Card>
           <CardHeader>
             <CardTitle className="font-headline">AI UI Generator</CardTitle>
-            <CardDescription>Describe the UI you want to create, and our AI will bring it to life.</CardDescription>
+            <CardDescription>Describe the UI you want to create, or let us surprise you!</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
+               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="grid w-full gap-1.5">
+                  <Label htmlFor="theme">Theme</Label>
+                  <Select value={selectedTheme} onValueChange={handleThemeChange} disabled={loading}>
+                    <SelectTrigger id="theme">
+                      <SelectValue placeholder="Select a theme" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {themes.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid w-full gap-1.5">
+                  <Label htmlFor="component-type">Component Type</Label>
+                   <Select value={selectedComponent} onValueChange={handleComponentChange} disabled={loading}>
+                    <SelectTrigger id="component-type">
+                      <SelectValue placeholder="Select a type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {componentTypes.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
               <div className="grid w-full gap-1.5">
                 <Label htmlFor="prompt">Your Prompt</Label>
                 <Textarea
@@ -67,10 +132,16 @@ export function GeneratorTab() {
                   disabled={loading}
                 />
               </div>
-              <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={loading}>
-                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
-                Generate UI
-              </Button>
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={loading}>
+                  {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
+                  Generate UI
+                </Button>
+                <Button type="button" variant="outline" className="w-full" onClick={handleSurprise} disabled={loading}>
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    Surprise Me!
+                </Button>
+              </div>
             </form>
           </CardContent>
         </Card>
