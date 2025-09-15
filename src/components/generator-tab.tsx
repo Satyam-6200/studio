@@ -83,7 +83,7 @@ export function GeneratorTab() {
       </div>
       <div className="flex flex-col gap-4">
         <h3 className="font-headline text-lg font-semibold">Live Preview</h3>
-        <div className="flex-grow rounded-lg border bg-card shadow-sm">
+        <div className="flex-grow rounded-lg border bg-card shadow-sm overflow-hidden">
         {loading ? (
             <div className="flex h-full min-h-[400px] items-center justify-center">
                 <div className="text-center">
@@ -94,7 +94,7 @@ export function GeneratorTab() {
         ) : generatedCode ? (
           <UIPreview html={generatedCode.html} />
         ) : (
-            <div className="flex h-full min-h-[400px] items-center justify-center">
+            <div className="flex h-full min-h-[400px] items-center justify-center bg-card">
                 <div className="text-center text-muted-foreground">
                     <Wand2 className="mx-auto h-12 w-12" />
                     <p className="mt-4">Your generated UI will appear here.</p>
