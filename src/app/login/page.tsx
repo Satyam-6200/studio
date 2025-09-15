@@ -13,8 +13,8 @@ export default function LoginPage() {
     >
        <div 
         className="absolute inset-0 bg-cover bg-center opacity-10"
-        style={{backgroundImage: "url('https://picsum.photos/seed/uidesign/1920/1080')"}}
-        data-ai-hint="UI innovation"
+        style={{backgroundImage: "url('https://picsum.photos/seed/future/1920/1080')"}}
+        data-ai-hint="future technology"
       ></div>
       <div className="relative grid w-full max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-2">
         <Card className="w-full max-w-sm justify-self-center lg:justify-self-start">
