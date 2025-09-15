@@ -6,8 +6,8 @@ export function UiAnimation() {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const rotateX = useTransform(y, [-300, 300], [10, -10]);
-  const rotateY = useTransform(x, [-300, 300], [-10, 10]);
+  const rotateX = useTransform(y, [-300, 300], [20, -20]);
+  const rotateY = useTransform(x, [-300, 300], [-360, 360]);
 
   const handleMouseMove = (event: React.MouseEvent) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -36,7 +36,6 @@ export function UiAnimation() {
         perspective: "1000px",
       }}
     >
-      <div className="absolute inset-0 bg-grid-pattern opacity-10 [mask-image:radial-gradient(ellipse_at_center,white_20%,transparent_80%)]"></div>
       
       <motion.div
         className="relative h-[400px] w-[640px] rounded-xl shadow-2xl bg-card/50 p-4 border border-border"
@@ -49,11 +48,6 @@ export function UiAnimation() {
         onMouseLeave={handleMouseLeave}
         transition={{ type: "spring", stiffness: 350, damping: 40 }}
       >
-        <div 
-          className="absolute inset-0 opacity-10"
-          style={{backgroundImage: "url('https://picsum.photos/seed/wavy/1280/800')"}}
-          data-ai-hint="wavy abstract"
-        ></div>
         <div className="absolute inset-0 bg-gradient-to-br from-background/20 via-transparent to-primary/20"></div>
 
         <motion.div 
