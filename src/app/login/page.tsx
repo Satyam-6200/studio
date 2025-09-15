@@ -13,8 +13,8 @@ export default function LoginPage() {
     >
        <div 
         className="absolute inset-0 bg-cover bg-center opacity-20"
-        style={{backgroundImage: "url('https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2070&auto=format&fit=crop')"}}
-        data-ai-hint="space technology"
+        style={{backgroundImage: "url('https://images.unsplash.com/photo-1534723328310-e82dad3ee43f?q=80&w=2070&auto=format&fit=crop')"}}
+        data-ai-hint="abstract technology"
       ></div>
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background/50 to-background"></div>
       <div className="relative grid w-full max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-2">
