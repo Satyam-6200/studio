@@ -12,8 +12,38 @@ import { UIPreview } from '@/components/ui-preview';
 import { CodeDisplay } from '@/components/code-display';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const themes = ['Modern', 'Minimalist', 'Playful', 'Corporate', 'Elegant', 'Futuristic'];
-const componentTypes = ['Login Form', 'Pricing Section', 'Contact Form', 'Hero Section', 'Testimonials', 'FAQ Section'];
+const themes = [
+  'Modern', 
+  'Minimalist', 
+  'Playful', 
+  'Corporate', 
+  'Elegant', 
+  'Futuristic',
+  'Glassmorphism',
+  'Neumorphism',
+  'Brutalist',
+  'Kawaii',
+  'Retro',
+  'Vaporwave',
+  'Cyberpunk'
+];
+const componentTypes = [
+  'Login Form', 
+  'Pricing Section', 
+  'Contact Form', 
+  'Hero Section', 
+  'Testimonials', 
+  'FAQ Section',
+  '3D Animated Card',
+  'Interactive Product Showcase',
+  'Onboarding Flow',
+  'User Profile Card',
+  'Music Player',
+  'Dashboard Widget',
+  'Timeline',
+  'Chat Interface',
+  'Notifications Panel'
+];
 
 const placeholderPrompt = "A modern hero section for a SaaS startup with a title, a short paragraph, a call-to-action button, and a placeholder image on the right.";
 
