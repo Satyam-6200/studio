@@ -10,8 +10,8 @@ export function UIPreview({ html }: UIPreviewProps) {
   const [iframeContent, setIframeContent] = useState('');
 
   useEffect(() => {
+    // This function will only run on the client side
     const getThemeStyles = () => {
-      if (typeof window === 'undefined') return '';
       const rootStyle = getComputedStyle(document.documentElement);
       const cssVars: { [key: string]: string } = {};
       const themePrefixes = ['--', '--chart'];
@@ -23,11 +23,11 @@ export function UIPreview({ html }: UIPreviewProps) {
         }
       }
 
-      const darkThemeCss = Object.entries(cssVars)
+      const themeCss = Object.entries(cssVars)
         .map(([key, value]) => `  ${key}: ${value};`)
         .join('\n');
       
-      return `.dark {\n${darkThemeCss}\n}`;
+      return `:root {\n${themeCss}\n}`;
     };
 
     const themeStyles = getThemeStyles();

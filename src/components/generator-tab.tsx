@@ -99,26 +99,21 @@ export function GeneratorTab() {
   };
 
   useEffect(() => {
-    const updatePrompt = () => {
-      if (selectedTheme && selectedComponent) {
-        setPrompt(`A ${selectedTheme.toLowerCase()} ${selectedComponent.toLowerCase()} for a website.`);
-      } else if (selectedTheme) {
-        setPrompt(`A UI with a ${selectedTheme.toLowerCase()} theme.`);
-      } else if (selectedComponent) {
-        setPrompt(`A ${selectedComponent.toLowerCase()} UI component.`);
+    if (selectedTheme || selectedComponent) {
+      const themePart = selectedTheme ? `${selectedTheme.toLowerCase()} ` : '';
+      const componentPart = selectedComponent ? `${selectedComponent.toLowerCase()}` : 'UI component';
+      let forPart = ' for a website.';
+      if (selectedComponent && !selectedTheme) {
+        forPart = ''
       }
+      if (!selectedComponent && selectedTheme) {
+        forPart = ' themed UI.'
+      }
+
+
+      setPrompt(`A ${themePart}${componentPart}${forPart}`);
     }
-    updatePrompt();
   }, [selectedTheme, selectedComponent]);
-
-
-  const handleThemeChange = (value: string) => {
-    setSelectedTheme(value);
-  }
-
-  const handleComponentChange = (value: string) => {
-    setSelectedComponent(value);
-  }
 
   return (
     <div className="grid h-full grid-cols-1 gap-8 md:grid-cols-2 md:grid-rows-[min-content_1fr]">
@@ -133,7 +128,7 @@ export function GeneratorTab() {
                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="grid w-full gap-1.5">
                   <Label htmlFor="theme">Theme</Label>
-                  <Select value={selectedTheme} onValueChange={handleThemeChange} disabled={loading}>
+                  <Select value={selectedTheme} onValueChange={setSelectedTheme} disabled={loading}>
                     <SelectTrigger id="theme">
                       <SelectValue placeholder="Select a theme" />
                     </SelectTrigger>
@@ -144,7 +139,7 @@ export function GeneratorTab() {
                 </div>
                 <div className="grid w-full gap-1.5">
                   <Label htmlFor="component-type">Component Type</Label>
-                   <Select value={selectedComponent} onValueChange={handleComponentChange} disabled={loading}>
+                   <Select value={selectedComponent} onValueChange={setSelectedComponent} disabled={loading}>
                     <SelectTrigger id="component-type">
                       <SelectValue placeholder="Select a type" />
                     </SelectTrigger>
