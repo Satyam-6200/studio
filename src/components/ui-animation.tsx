@@ -43,7 +43,7 @@ export function UiAnimation() {
                 style={{ transform: "translateZ(80px)" }}
             >
                 <Image
-                src="https://picsum.photos/seed/ai-brain/600/600"
+                src="https://images.unsplash.com/photo-1697577418970-95d99b5a55cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhaXxlbnwwfHx8fDE3NTc5Njc5MTZ8MA&ixlib=rb-4.1.0&q=80&w=1080"
                 alt="AI Brain"
                 fill
                 className="object-contain"
