@@ -1,13 +1,17 @@
 "use client";
 
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 
 export function UiAnimation() {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const rotateX = useTransform(y, [-300, 300], [20, -20]);
-  const rotateY = useTransform(x, [-300, 300], [-360, 360]);
+  const springConfig = { stiffness: 350, damping: 40 };
+  const smoothX = useSpring(x, springConfig);
+  const smoothY = useSpring(y, springConfig);
+
+  const rotateX = useTransform(smoothY, [-300, 300], [20, -20]);
+  const rotateY = useTransform(smoothX, [-300, 300], [-360, 360]);
 
   const handleMouseMove = (event: React.MouseEvent) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -46,7 +50,6 @@ export function UiAnimation() {
         }}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        transition={{ type: "spring", stiffness: 350, damping: 40 }}
       >
         <div className="absolute inset-0 bg-gradient-to-br from-background/20 via-transparent to-primary/20"></div>
 
