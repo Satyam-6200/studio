@@ -35,8 +35,17 @@ export default function Home() {
               </Link>
             </div>
           </div>
+          <div className="relative w-full max-w-5xl mx-auto mt-16">
+            <video
+              className="rounded-lg border-2 border-primary/50 shadow-lg"
+              autoPlay
+              loop
+              muted
+              playsInline
+              src="https://cdn.dribbble.com/userupload/11188102/file/original-b79b29304f5e7c38090558a2f3d61fb3.mp4"
+            ></video>
+          </div>
         </section>
-        <Showcase />
       </main>
     </div>
   );
