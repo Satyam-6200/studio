@@ -44,11 +44,11 @@ export function UiAnimation() {
         transition={{ type: "spring", stiffness: 300, damping: 10, mass: 0.5 }}
       >
         <Image
-          src="https://picsum.photos/seed/future-ui/800/800"
+          src="https://picsum.photos/seed/ai-ui-design/800/800"
           alt="Interactive UI"
           fill
           className="rounded-xl object-cover"
-          data-ai-hint="future ui"
+          data-ai-hint="AI UI design"
         />
         <motion.div
             className="absolute inset-0 rounded-xl"
