@@ -13,7 +13,7 @@ export default function Home() {
           <div className="absolute inset-0 -z-10 h-full w-full bg-background bg-[radial-gradient(hsl(var(--muted))_1px,transparent_1px)] [background-size:16px_16px]"></div>
           <div className="relative z-10 mb-24">
             <h1 className="text-5xl font-bold font-headline bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70 pb-4 md:text-7xl">
-              Build UIs with UI Spark
+              Build UIs with CORRECTED UI
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground md:text-xl">
               An AI-powered platform to generate, optimize, and discover beautiful UI components for your next project.

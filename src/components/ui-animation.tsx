@@ -69,7 +69,7 @@ export function UiAnimation() {
                 className="absolute top-8 left-8 text-left"
                 style={{ transform: "translateZ(60px)" }}
             >
-                <h2 className="font-headline text-3xl font-bold">UI Spark</h2>
+                <h2 className="font-headline text-3xl font-bold">CORRECTED UI</h2>
                 <p className="text-primary text-lg">Beyond Imagination</p>
             </motion.div>
 
