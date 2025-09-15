@@ -9,15 +9,16 @@ import { UiAnimation } from "@/components/ui-animation";
 export default function LoginPage() {
   return (
     <div 
-      className="relative flex h-full w-full items-center justify-center bg-background p-4 sm:p-8 md:p-12"
+      className="relative flex h-full w-full items-center justify-center bg-background p-4 sm:p-8 md:p-12 overflow-hidden"
     >
        <div 
-        className="absolute inset-0 bg-cover bg-center opacity-10"
-        style={{backgroundImage: "url('https://picsum.photos/seed/future/1920/1080')"}}
+        className="absolute inset-0 bg-cover bg-center opacity-20"
+        style={{backgroundImage: "url('https://picsum.photos/seed/space/1920/1080')"}}
         data-ai-hint="future technology"
       ></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-background/50 to-background"></div>
       <div className="relative grid w-full max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-2">
-        <Card className="w-full max-w-sm justify-self-center lg:justify-self-start z-10">
+        <Card className="w-full max-w-sm justify-self-center lg:justify-self-start z-10 border-border/50 bg-card/80 backdrop-blur-sm">
           <CardHeader className="space-y-2 text-center">
               <Logo className="mx-auto h-8 w-8 text-primary" />
             <CardTitle className="text-2xl font-bold font-headline">Welcome Back</CardTitle>
