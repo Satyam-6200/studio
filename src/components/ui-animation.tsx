@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import Image from "next/image";
 
 export function UiAnimation() {
   const x = useMotionValue(0);
@@ -29,7 +28,6 @@ export function UiAnimation() {
     x.set(0);
     y.set(0);
   };
-
 
   return (
     <div
@@ -62,19 +60,6 @@ export function UiAnimation() {
             className="w-full h-full flex items-center justify-center"
             style={{ transformStyle: "preserve-3d" }}
         >
-            <motion.div 
-                className="relative h-64 w-64"
-                style={{ transform: "translateZ(80px)" }}
-            >
-                <Image
-                src="https://images.unsplash.com/photo-1697577418970-95d99b5a55cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhaXxlbnwwfHx8fDE3NTc5Njc5MTZ8MA&ixlib=rb-4.1.0&q=80&w=1080"
-                alt="AI Brain"
-                fill
-                className="object-contain"
-                data-ai-hint="AI brain"
-                />
-            </motion.div>
-            
             <motion.div 
                 className="absolute top-8 left-8 text-left"
                 style={{ transform: "translateZ(60px)" }}
