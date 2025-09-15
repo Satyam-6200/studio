@@ -1,3 +1,28 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "showcase-1",
+      "description": "Abstract UI component render",
+      "imageUrl": "https://picsum.photos/seed/showcase1/600/400",
+      "imageHint": "abstract ui"
+    },
+    {
+      "id": "showcase-2",
+      "description": "Dashboard analytics concept",
+      "imageUrl": "https://picsum.photos/seed/showcase2/600/400",
+      "imageHint": "dashboard analytics"
+    },
+    {
+      "id": "showcase-3",
+      "description": "Modern application interface",
+      "imageUrl": "https://picsum.photos/seed/showcase3/600/400",
+      "imageHint": "modern interface"
+    },
+    {
+      "id": "showcase-4",
+      "description": "User profile screen with stats",
+      "imageUrl": "https://picsum.photos/seed/showcase4/600/400",
+      "imageHint": "user profile"
+    }
+  ]
 }

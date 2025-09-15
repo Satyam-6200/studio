@@ -7,8 +7,8 @@ import Link from "next/link";
 
 export default function LoginPage() {
   return (
-    <div className="flex h-full items-center justify-center bg-background">
-      <Card className="mx-auto max-w-sm">
+    <div className="flex h-full w-full items-start justify-end bg-background p-4 pt-16 sm:p-8 md:p-12">
+      <Card className="w-full max-w-sm">
         <CardHeader className="space-y-2 text-center">
             <Logo className="mx-auto h-8 w-8 text-primary" />
           <CardTitle className="text-2xl font-bold font-headline">Welcome Back</CardTitle>
@@ -29,9 +29,11 @@ export default function LoginPage() {
               </div>
               <Input id="password" type="password" required />
             </div>
-            <Button type="submit" className="w-full">
-              Login
-            </Button>
+            <Link href="/dashboard" className="block w-full">
+              <Button type="submit" className="w-full">
+                Login
+              </Button>
+            </Link>
           </div>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{' '}
