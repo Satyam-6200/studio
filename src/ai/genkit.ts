@@ -3,7 +3,12 @@ import {googleAI} from '@genkit-ai/googleai';
 import {nextPlugin} from '@genkit-ai/next';
 
 configureGenkit({
-  plugins: [googleAI(), nextPlugin()],
+  plugins: [
+    googleAI(),
+    nextPlugin({
+      // You can pass in Next.js-specific options here.
+    }),
+  ],
   logLevel: 'debug',
   enableTracingAndMetrics: true,
 });
