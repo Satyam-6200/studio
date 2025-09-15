@@ -17,7 +17,7 @@ export default function LoginPage() {
         data-ai-hint="future technology"
       ></div>
       <div className="relative grid w-full max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-2">
-        <Card className="w-full max-w-sm justify-self-center lg:justify-self-start">
+        <Card className="w-full max-w-sm justify-self-center lg:justify-self-start z-10">
           <CardHeader className="space-y-2 text-center">
               <Logo className="mx-auto h-8 w-8 text-primary" />
             <CardTitle className="text-2xl font-bold font-headline">Welcome Back</CardTitle>
