@@ -9,6 +9,7 @@
  */
 
 import {ai} from '@/ai/genkit';
+import {googleAI} from '@genkit-ai/googleai';
 import {z} from 'genkit';
 
 const SuggestUxOptimizationsInputSchema = z.object({
@@ -41,6 +42,7 @@ const prompt = ai.definePrompt({
   name: 'suggestUxOptimizationsPrompt',
   input: {schema: SuggestUxOptimizationsInputSchema},
   output: {schema: SuggestUxOptimizationsOutputSchema},
+  model: googleAI.model('gemini-1.5-flash-preview-0514'),
   prompt: `You are an expert UX designer. Analyze the following UI code and provide suggestions for UX improvements, such as color contrast adjustments or flow enhancements, so that I can create a more user-friendly interface.
 
 UI Code:
