@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Wand2, Loader2, Sparkles } from 'lucide-react';
 import { generateUiCode } from '@/ai/flows/generate-ui-from-prompt';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,7 +11,6 @@ import { useToast } from '@/hooks/use-toast';
 import { UIPreview } from '@/components/ui-preview';
 import { CodeDisplay } from '@/components/code-display';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useEffect } from 'react';
 
 const themes = [
   'Modern', 
@@ -88,19 +87,14 @@ export function GeneratorTab() {
   };
   
   const handleSurprise = () => {
-    // These `useEffect` calls will run after the state is set,
-    // which is not what we want for an immediate action.
-    // We should construct the prompt and call `handleGenerate` directly.
     const randomTheme = themes[Math.floor(Math.random() * themes.length)];
     const randomComponent = componentTypes[Math.floor(Math.random() * componentTypes.length)];
     const surprisePrompt = `A ${randomTheme.toLowerCase()} ${randomComponent.toLowerCase()} for a website.`;
     
-    // Set the state for the UI to reflect the change
     setPrompt(surprisePrompt);
     setSelectedTheme(randomTheme);
     setSelectedComponent(randomComponent);
 
-    // Immediately trigger generation with the new prompt
     handleGenerate(surprisePrompt);
   };
 

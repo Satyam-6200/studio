@@ -10,13 +10,11 @@ export function UIPreview({ html }: UIPreviewProps) {
   const [iframeContent, setIframeContent] = useState('');
 
   useEffect(() => {
-    // This function now runs on the client, so it can access `window`
     const getThemeStyles = () => {
       if (typeof window === 'undefined') return '';
-      // Extract CSS variables from the document's :root
       const rootStyle = getComputedStyle(document.documentElement);
       const cssVars: { [key: string]: string } = {};
-      const themePrefixes = ['--', '--chart']; // Prefixes for variables we want to capture
+      const themePrefixes = ['--', '--chart'];
       
       for (let i = 0; i < rootStyle.length; i++) {
         const propName = rootStyle[i];
@@ -25,7 +23,6 @@ export function UIPreview({ html }: UIPreviewProps) {
         }
       }
 
-      // Generate the CSS string
       const darkThemeCss = Object.entries(cssVars)
         .map(([key, value]) => `  ${key}: ${value};`)
         .join('\n');
@@ -41,7 +38,7 @@ export function UIPreview({ html }: UIPreviewProps) {
           <script src="https://cdn.tailwindcss.com"></script>
           <script>
             tailwind.config = {
-              darkMode: 'class', // Enable dark mode
+              darkMode: 'class',
               theme: {
                 extend: {
                    colors: {
