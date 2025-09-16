@@ -16,9 +16,10 @@ export default function LoginPage() {
   const { user, signInWithEmail } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("demo@example.com");
+  const [password, setPassword] = useState("demopass");
 
+  // This effect will redirect if the user is already "logged in"
   useEffect(() => {
     if (user) {
       router.push("/dashboard");
@@ -27,16 +28,8 @@ export default function LoginPage() {
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
-    try {
-      await signInWithEmail(email, password);
-      router.push("/dashboard");
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Login Failed",
-        description: error.message,
-      });
-    }
+    // In demo mode, we just navigate to the dashboard.
+    router.push("/dashboard");
   };
 
   return (
@@ -54,7 +47,7 @@ export default function LoginPage() {
           <CardHeader className="space-y-2 text-center">
               <Logo className="mx-auto h-8 w-8 text-primary" />
             <CardTitle className="text-2xl font-bold font-headline">Welcome Back</CardTitle>
-            <CardDescription>Enter your email below to login to your account</CardDescription>
+            <CardDescription>Enter any details to continue to the dashboard.</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin}>
@@ -86,7 +79,7 @@ export default function LoginPage() {
                   />
                 </div>
                 <Button type="submit" className="w-full">
-                  Login
+                  Login (Demo)
                 </Button>
               </div>
             </form>

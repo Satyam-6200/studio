@@ -14,13 +14,16 @@ export default function DashboardPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push("/login");
-    }
-  }, [user, loading, router]);
+  // In demo mode, we don't need to check for a user.
+  // The useAuth hook will provide a simulated user.
+  // useEffect(() => {
+  //   if (!loading && !user) {
+  //     router.push("/login");
+  //   }
+  // }, [user, loading, router]);
 
-  if (loading || !user) {
+  // A loading state can still be useful if the auth hook had async logic.
+  if (loading) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-background">
         <div className="text-center">

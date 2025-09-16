@@ -13,9 +13,8 @@ import { useState, FormEvent, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function SignupPage() {
-  const { user, signUpWithEmail } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
-  const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -28,24 +27,8 @@ export default function SignupPage() {
 
   const handleSignup = async (e: FormEvent) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      toast({
-        variant: "destructive",
-        title: "Signup Failed",
-        description: "Passwords do not match.",
-      });
-      return;
-    }
-    try {
-      await signUpWithEmail(email, password);
-      router.push("/dashboard");
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Signup Failed",
-        description: error.message,
-      });
-    }
+    // In demo mode, we just navigate to the dashboard.
+    router.push("/dashboard");
   };
 
   return (
@@ -63,7 +46,7 @@ export default function SignupPage() {
           <CardHeader className="space-y-2 text-center">
             <Logo className="mx-auto h-8 w-8 text-primary" />
             <CardTitle className="text-2xl font-bold font-headline">Create an Account</CardTitle>
-            <CardDescription>Enter your details to get started.</CardDescription>
+            <CardDescription>Enter any details to get started.</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSignup}>
@@ -100,7 +83,7 @@ export default function SignupPage() {
                   />
                 </div>
                 <Button type="submit" className="w-full">
-                  Sign Up
+                  Sign Up (Demo)
                 </Button>
               </div>
             </form>

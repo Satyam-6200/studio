@@ -7,14 +7,14 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-import {
-  User,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut as firebaseSignOut,
-} from "firebase/auth";
-import { auth } from "@/lib/firebase/firebase";
+import type { User } from "firebase/auth";
+
+// SIMULATED USER FOR DEMO MODE
+const demoUser = {
+  uid: "demouser",
+  email: "demo@example.com",
+  displayName: "Demo User",
+} as User;
 
 interface AuthContextType {
   user: User | null;
@@ -27,27 +27,23 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const user = demoUser;
+  const loading = false;
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
-
-  const signInWithEmail = (email: string, pass: string) => {
-    return signInWithEmailAndPassword(auth, email, pass);
+  const signInWithEmail = async (email: string, pass: string) => {
+    console.log("DEMO MODE: Simulating login for", email);
+    return Promise.resolve();
   };
 
-  const signUpWithEmail = (email: string, pass: string) => {
-    return createUserWithEmailAndPassword(auth, email, pass);
+  const signUpWithEmail = async (email: string, pass: string) => {
+    console.log("DEMO MODE: Simulating signup for", email);
+    return Promise.resolve();
   };
   
-  const signOut = () => {
-    return firebaseSignOut(auth);
+  const signOut = async () => {
+    console.log("DEMO MODE: Simulating logout");
+    // In a real app, you'd clear the user state. Here, we do nothing to stay logged in.
+     return Promise.resolve();
   };
 
   const value = {
