@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { TiltCard } from '@/components/tilt-card';
 
 const components = [
   {
@@ -95,17 +96,19 @@ export function LibraryTab() {
       />
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filteredComponents.map(component => (
-          <Card key={component.name}>
-            <CardHeader className="flex flex-row items-center justify-between pb-4">
-              <CardTitle className="text-lg">{component.name}</CardTitle>
-              <Badge variant="secondary">{component.category}</Badge>
-            </CardHeader>
-            <CardContent>
-              <div className="flex min-h-[100px] items-center justify-center rounded-md border border-dashed p-6">
-                {component.preview}
-              </div>
-            </CardContent>
-          </Card>
+          <TiltCard key={component.name}>
+            <Card className="h-full">
+              <CardHeader className="flex flex-row items-center justify-between pb-4">
+                <CardTitle className="text-lg">{component.name}</CardTitle>
+                <Badge variant="secondary">{component.category}</Badge>
+              </CardHeader>
+              <CardContent>
+                <div className="flex min-h-[100px] items-center justify-center rounded-md border border-dashed p-6">
+                  {component.preview}
+                </div>
+              </CardContent>
+            </Card>
+          </TiltCard>
         ))}
         {filteredComponents.length === 0 && (
           <p className="col-span-full py-12 text-center text-muted-foreground">No components found.</p>
