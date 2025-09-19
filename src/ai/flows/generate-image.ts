@@ -17,6 +17,7 @@ const GenerateImageInputSchema = z.object({
   referenceImageDataUri: z
     .string()
     .optional()
+    .nullable()
     .describe(
       "An optional reference image as a data URI. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
     ),

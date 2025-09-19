@@ -73,7 +73,7 @@ export function ImageTab() {
         try {
             const result = await generateImage({
                 prompt,
-                referenceImageDataUri: referenceImage,
+                referenceImageDataUri: referenceImage || undefined,
                 aspectRatio: aspectRatio,
             });
             setGeneratedImage(result.imageDataUri);
