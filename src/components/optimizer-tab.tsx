@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -49,13 +50,22 @@ export function OptimizerTab() {
     try {
       const result = await suggestUxOptimizations({ uiCode });
       setSuggestions(result.suggestions);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      toast({
-        variant: "destructive",
-        title: "Analysis Failed",
-        description: "Something went wrong while analyzing your code. Please try again.",
-      });
+      const errorMessage = error.message || '';
+      if (errorMessage.includes('503') || errorMessage.toLowerCase().includes('overloaded')) {
+        toast({
+          variant: "destructive",
+          title: "Model is Overloaded",
+          description: "The AI model is currently experiencing high demand. Please try again in a few moments.",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Analysis Failed",
+          description: "Something went wrong while analyzing your code. Please try again.",
+        });
+      }
     } finally {
       setLoading(false);
     }

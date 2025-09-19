@@ -72,13 +72,22 @@ export function GeneratorTab() {
     try {
       const result = await generateUiCode({ prompt: currentPrompt, extraInstructions });
       setGeneratedCode(result);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      toast({
-        variant: "destructive",
-        title: "Generation Failed",
-        description: "Something went wrong while generating the UI. Please try again.",
-      });
+      const errorMessage = error.message || '';
+      if (errorMessage.includes('503') || errorMessage.toLowerCase().includes('overloaded')) {
+        toast({
+          variant: "destructive",
+          title: "Model is Overloaded",
+          description: "The AI model is currently experiencing high demand. Please try again in a few moments.",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Generation Failed",
+          description: "Something went wrong while generating the UI. Please try again.",
+        });
+      }
     } finally {
       setLoading(false);
     }
