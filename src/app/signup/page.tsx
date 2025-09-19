@@ -19,12 +19,6 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  useEffect(() => {
-    if (user) {
-      router.push("/dashboard");
-    }
-  }, [user, router]);
-
   const handleSignup = async (e: FormEvent) => {
     e.preventDefault();
     // In demo mode, we just navigate to the dashboard.

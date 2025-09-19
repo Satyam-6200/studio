@@ -13,18 +13,11 @@ import { useState, FormEvent, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function LoginPage() {
-  const { user, signInWithEmail } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
   const [email, setEmail] = useState("demo@example.com");
   const [password, setPassword] = useState("demopass");
-
-  // This effect will redirect if the user is already "logged in"
-  useEffect(() => {
-    if (user) {
-      router.push("/dashboard");
-    }
-  }, [user, router]);
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
