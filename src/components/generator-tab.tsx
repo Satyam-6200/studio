@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Wand2, Loader2, Sparkles } from 'lucide-react';
+import { Wand2, Loader2, Sparkles, PenSquare, Eye } from 'lucide-react';
 import { generateUiCode } from '@/ai/flows/generate-ui-from-prompt';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -53,7 +53,10 @@ export function GeneratorTab() {
   const { toast } = useToast();
   const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
-  const [generatedCode, setGeneratedCode] = useState<{ html: string } | null>(null);
+  const [generatedHtml, setGeneratedHtml] = useState<string | null>(null);
+  const [editableHtml, setEditableHtml] = useState<string>('');
+  const [isEditing, setIsEditing] = useState(false);
+
   const [selectedTheme, setSelectedTheme] = useState('');
   const [selectedComponent, setSelectedComponent] = useState('');
   const [extraInstructions, setExtraInstructions] = useState('');
@@ -68,10 +71,12 @@ export function GeneratorTab() {
       return;
     }
     setLoading(true);
-    setGeneratedCode(null);
+    setGeneratedHtml(null);
+    setIsEditing(false);
     try {
       const result = await generateUiCode({ prompt: currentPrompt, extraInstructions });
-      setGeneratedCode(result);
+      setGeneratedHtml(result.html);
+      setEditableHtml(result.html);
     } catch (error: any) {
       console.error(error);
       const errorMessage = error.message || '';
@@ -108,7 +113,6 @@ export function GeneratorTab() {
     setSelectedComponent(randomComponent);
     setExtraInstructions("Add a simple fade-in animation to the main container.");
 
-    // We pass the new prompt directly to ensure the generation uses it
     handleGenerate(surprisePrompt);
   };
 
@@ -131,6 +135,8 @@ export function GeneratorTab() {
       setPrompt(fullPrompt + '.');
     }
   }, [selectedTheme, selectedComponent]);
+
+  const previewHtml = isEditing ? editableHtml : generatedHtml;
 
   return (
     <div className="grid h-full grid-cols-1 gap-8 md:grid-cols-2 md:grid-rows-[min-content_1fr]">
@@ -204,10 +210,25 @@ export function GeneratorTab() {
             </form>
           </CardContent>
         </Card>
-        {generatedCode && (
+        {generatedHtml && (
           <div className="flex flex-col gap-4">
-             <h3 className="font-headline text-lg font-semibold">Export Code</h3>
-            <CodeDisplay html={generatedCode.html} />
+             <div className="flex items-center justify-between">
+                <h3 className="font-headline text-lg font-semibold">Generated Code</h3>
+                <Button variant="outline" size="sm" onClick={() => setIsEditing(!isEditing)}>
+                    {isEditing ? <Eye className="mr-2 h-4 w-4" /> : <PenSquare className="mr-2 h-4 w-4" />}
+                    {isEditing ? 'View Only' : 'Edit Code'}
+                </Button>
+            </div>
+            {isEditing ? (
+                 <Textarea
+                    value={editableHtml}
+                    onChange={(e) => setEditableHtml(e.target.value)}
+                    className="h-64 font-code text-xs"
+                    aria-label="Editable UI Code"
+                />
+            ) : (
+                <CodeDisplay html={generatedHtml} />
+            )}
           </div>
         )}
       </div>
@@ -220,8 +241,8 @@ export function GeneratorTab() {
                     <p className="mt-4 text-muted-foreground">Generating your UI...</p>
                 </div>
             </div>
-        ) : generatedCode ? (
-          <UIPreview html={generatedCode.html} />
+        ) : previewHtml ? (
+          <UIPreview html={previewHtml} />
         ) : (
             <div className="flex h-full w-full items-center justify-center bg-card p-8">
               <div className="w-full max-w-md text-center">
