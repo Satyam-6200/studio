@@ -35,6 +35,11 @@ const basePrompt = `You are an AI expert in UI/UX design, Tailwind CSS, and Fram
   You will generate a single block of HTML code based on the user's prompt.
   The HTML should be styled using Tailwind CSS classes.
   
+  If the user's prompt mentions an image, use a placeholder from picsum.photos.
+  - The image URL should be in the format: https://picsum.photos/seed/{seed}/{width}/{height} (e.g., https://picsum.photos/seed/1/600/400).
+  - Use a random number for the seed.
+  - Add a 'data-ai-hint' attribute to the image tag with one or two keywords describing the image for later replacement (e.g., data-ai-hint="nature landscape").
+
   If the user provides animation or styling instructions, apply them.
   - For animations, use Framer Motion by adding attributes like "initial", "animate", "whileHover", etc. to the HTML tags. You CANNOT use the <motion.div> syntax, just add the props to standard HTML elements.
   - For styling, use Tailwind CSS classes. Be creative with colors, gradients, and effects if requested.
