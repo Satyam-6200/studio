@@ -1,34 +1,40 @@
+
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface UIPreviewProps {
   html: string;
 }
 
+// Helper function to get all theme CSS variables from the document
+const getThemeStyles = () => {
+  // This function must run on the client side
+  if (typeof window === 'undefined') {
+    return '';
+  }
+
+  const rootStyle = getComputedStyle(document.documentElement);
+  const themePrefixes = ['--', '--chart'];
+  let cssText = ':root {\n';
+  
+  for (let i = 0; i < rootStyle.length; i++) {
+    const propName = rootStyle[i];
+    if (themePrefixes.some(prefix => propName.startsWith(prefix))) {
+      cssText += `  ${propName}: ${rootStyle.getPropertyValue(propName)};\n`;
+    }
+  }
+
+  cssText += '}';
+  return cssText;
+};
+
 export function UIPreview({ html }: UIPreviewProps) {
-  const [iframeContent, setIframeContent] = useState('');
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
-    // This function will only run on the client side
-    const getThemeStyles = () => {
-      const rootStyle = getComputedStyle(document.documentElement);
-      const cssVars: { [key: string]: string } = {};
-      const themePrefixes = ['--', '--chart'];
-      
-      for (let i = 0; i < rootStyle.length; i++) {
-        const propName = rootStyle[i];
-        if (themePrefixes.some(prefix => propName.startsWith(prefix))) {
-          cssVars[propName] = rootStyle.getPropertyValue(propName);
-        }
-      }
-
-      const themeCss = Object.entries(cssVars)
-        .map(([key, value]) => `  ${key}: ${value};`)
-        .join('\n');
-      
-      return `:root {\n${themeCss}\n}`;
-    };
+    const iframe = iframeRef.current;
+    if (!iframe || !iframe.contentWindow) return;
 
     const themeStyles = getThemeStyles();
     
@@ -38,7 +44,7 @@ export function UIPreview({ html }: UIPreviewProps) {
           <script src="https://cdn.tailwindcss.com"></script>
           <script>
             tailwind.config = {
-              darkMode: 'class',
+              darkMode: 'class', // The iframe will respect the 'dark' class
               theme: {
                 extend: {
                    colors: {
@@ -83,15 +89,27 @@ export function UIPreview({ html }: UIPreviewProps) {
                       '5': 'hsl(var(--chart-5))',
                     },
                   },
+                   borderRadius: {
+                    lg: 'var(--radius)',
+                    md: 'calc(var(--radius) - 2px)',
+                    sm: 'calc(var(--radius) - 4px)',
+                  }
                 }
               }
             }
           </script>
           <style>
-            body { margin: 0; font-family: sans-serif; }
+            body { 
+              margin: 0; 
+              font-family: Inter, sans-serif;
+              -webkit-font-smoothing: antialiased;
+              -moz-osx-font-smoothing: grayscale;
+            }
+            /* Inject the theme variables from the parent document */
             ${themeStyles}
           </style>
         </head>
+        /* The 'dark' class enables dark mode, matching your app */
         <body class="dark bg-background">
           <div class="p-4">
             ${html}
@@ -99,17 +117,22 @@ export function UIPreview({ html }: UIPreviewProps) {
         </body>
       </html>
     `;
-    setIframeContent(content);
+    
+    // Use srcDoc for security and simplicity
+    iframe.srcdoc = content;
+
   }, [html]);
 
   return (
     <div className="h-full w-full rounded-lg bg-card">
       <iframe
-        srcDoc={iframeContent}
+        ref={iframeRef}
         title="UI Preview"
-        sandbox="allow-scripts"
+        sandbox="allow-scripts" // Allow scripts for things like Tailwind JIT
         className="h-full w-full rounded-lg"
       />
     </div>
   );
 }
+
+    

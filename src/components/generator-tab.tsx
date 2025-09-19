@@ -97,23 +97,27 @@ export function GeneratorTab() {
     setSelectedTheme(randomTheme);
     setSelectedComponent(randomComponent);
 
+    // We pass the new prompt directly to ensure the generation uses it
     handleGenerate(surprisePrompt);
   };
 
   useEffect(() => {
     if (selectedTheme || selectedComponent) {
-      const themePart = selectedTheme ? `${selectedTheme.toLowerCase()} ` : '';
-      const componentPart = selectedComponent ? `${selectedComponent.toLowerCase()}` : 'UI component';
-      let forPart = ' for a website.';
+      const themePart = selectedTheme ? `${selectedTheme} ` : '';
+      const componentPart = selectedComponent ? `${selectedComponent}` : 'UI component';
+      let fullPrompt = `A ${themePart}${componentPart.toLowerCase()}`;
+      
       if (selectedComponent && !selectedTheme) {
-        forPart = ''
+        // "A Login Form"
+      } else if (selectedTheme && !selectedComponent) {
+        // "A Modern themed UI"
+        fullPrompt += ' themed UI';
+      } else {
+        // "A Modern Login Form for a website"
+        fullPrompt += ' for a website';
       }
-      if (!selectedComponent && selectedTheme) {
-        forPart = ' themed UI.'
-      }
-
-
-      setPrompt(`A ${themePart}${componentPart}${forPart}`);
+      
+      setPrompt(fullPrompt + '.');
     }
   }, [selectedTheme, selectedComponent]);
 
@@ -195,26 +199,21 @@ export function GeneratorTab() {
         ) : generatedCode ? (
           <UIPreview html={generatedCode.html} />
         ) : (
-            <div className="flex h-full w-full items-center justify-center bg-card p-8">
-              <div className="w-full max-w-md">
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-4">
-                    <Skeleton className="h-12 w-12 rounded-full" />
-                    <div className="space-y-2">
-                      <Skeleton className="h-4 w-[250px]" />
-                      <Skeleton className="h-4 w-[200px]" />
-                    </div>
-                  </div>
-                  <Skeleton className="h-48 w-full" />
-                  <div className="flex justify-end space-x-2">
-                    <Skeleton className="h-10 w-24" />
-                    <Skeleton className="h-10 w-24" />
-                  </div>
+             <div className="flex h-full w-full items-center justify-center bg-card p-8">
+              <div className="w-full max-w-md text-center">
+                <div className="mx-auto mb-6 w-fit rounded-full bg-primary/10 p-4">
+                  <Wand2 className="h-8 w-8 text-primary" />
                 </div>
-                <div className="mt-8 text-center text-muted-foreground">
-                  <Wand2 className="mx-auto h-8 w-8" />
-                  <p className="mt-2 text-sm">Your generated UI will appear here.</p>
-                  <p className="text-xs">Describe a component or click "Surprise Me!"</p>
+                <h3 className="font-headline text-xl font-semibold">Your generated UI will appear here</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Describe a component, choose a theme, or click "Surprise Me!" to get started.
+                </p>
+                <div className="mt-8 space-y-4 rounded-lg border border-dashed border-border/50 p-4">
+                  <Skeleton className="h-16 w-full" />
+                  <div className="flex items-center space-x-4">
+                    <Skeleton className="h-10 flex-grow" />
+                    <Skeleton className="h-10 w-24" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -223,3 +222,5 @@ export function GeneratorTab() {
     </div>
   );
 }
+
+    
