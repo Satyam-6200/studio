@@ -223,7 +223,7 @@ export function GeneratorTab() {
         ) : generatedCode ? (
           <UIPreview html={generatedCode.html} />
         ) : (
-             <div className="flex h-full w-full items-center justify-center bg-card p-8">
+            <div className="flex h-full w-full items-center justify-center bg-card p-8">
               <div className="w-full max-w-md text-center">
                 <div className="mx-auto mb-6 w-fit rounded-full bg-primary/10 p-4">
                   <Wand2 className="h-8 w-8 text-primary" />
@@ -232,13 +232,6 @@ export function GeneratorTab() {
                 <p className="mt-2 text-sm text-muted-foreground">
                   Describe a component, choose a theme, or click "Surprise Me!" to get started.
                 </p>
-                <div className="mt-8 space-y-4 rounded-lg border border-dashed border-border/50 p-4">
-                  <Skeleton className="h-16 w-full" />
-                  <div className="flex items-center space-x-4">
-                    <Skeleton className="h-10 flex-grow" />
-                    <Skeleton className="h-10 w-24" />
-                  </div>
-                </div>
               </div>
             </div>
         )}
