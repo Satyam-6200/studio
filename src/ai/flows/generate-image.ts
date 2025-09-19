@@ -63,9 +63,10 @@ const generateImageFlow = ai.defineFlow(
     } else {
       // Text-to-image generation
       response = await ai.generate({
-        model: 'googleai/imagen-4.0-fast-generate-001',
+        model: 'googleai/gemini-2.5-flash-image-preview',
         prompt: prompt,
         config: {
+          responseModalities: ['TEXT', 'IMAGE'],
           ...(aspectRatio ? { aspectRatio } : {}),
         }
       });
