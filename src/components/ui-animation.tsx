@@ -41,6 +41,7 @@ export function UiAnimation() {
       }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onPointerMove={(e) => e.stopPropagation()}
     >
       <motion.div
         className="relative h-[400px] w-[640px] rounded-xl shadow-2xl bg-card/50 p-4 border border-border overflow-hidden"
