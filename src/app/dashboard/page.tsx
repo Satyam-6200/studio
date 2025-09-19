@@ -6,7 +6,8 @@ import { GeneratorTab, GenerationHistoryItem } from "@/components/generator-tab"
 import { OptimizerTab } from "@/components/optimizer-tab";
 import { LibraryTab } from "@/components/library-tab";
 import { HistoryTab } from "@/components/history-tab";
-import { Wand2, Lightbulb, Library, History } from "lucide-react";
+import { ImageTab } from "@/components/image-tab";
+import { Wand2, Lightbulb, Library, History, Image as ImageIcon } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -36,9 +37,12 @@ export default function DashboardPage() {
       <main className="flex-grow overflow-auto p-4 sm:p-6 lg:p-8">
         <Tabs defaultValue="generator" className="h-full">
           <div className="flex justify-center">
-            <TabsList className="mb-6 grid grid-cols-4 w-full max-w-2xl">
+            <TabsList className="mb-6 grid grid-cols-5 w-full max-w-3xl">
               <TabsTrigger value="generator" className="gap-2">
                 <Wand2 className="h-4 w-4" /> Generator
+              </TabsTrigger>
+               <TabsTrigger value="image" className="gap-2">
+                <ImageIcon className="h-4 w-4" /> Image
               </TabsTrigger>
               <TabsTrigger value="optimizer" className="gap-2">
                 <Lightbulb className="h-4 w-4" /> Optimizer
@@ -53,6 +57,9 @@ export default function DashboardPage() {
           </div>
           <TabsContent value="generator" className="h-full">
             <GeneratorTab onGenerate={addHistoryItem} />
+          </TabsContent>
+          <TabsContent value="image" className="h-full">
+            <ImageTab />
           </TabsContent>
           <TabsContent value="optimizer" className="h-full">
             <OptimizerTab />
