@@ -3,7 +3,7 @@
 import type { GenerationHistoryItem } from './generator-tab';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CodeDisplay } from '@/components/ui-preview';
+import { CodeDisplay } from '@/components/code-display';
 import { UIPreview } from '@/components/ui-preview';
 import { History, FileText, Code } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
