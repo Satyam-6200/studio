@@ -56,6 +56,7 @@ export function GeneratorTab() {
   const [generatedCode, setGeneratedCode] = useState<{ html: string } | null>(null);
   const [selectedTheme, setSelectedTheme] = useState('');
   const [selectedComponent, setSelectedComponent] = useState('');
+  const [extraInstructions, setExtraInstructions] = useState('');
 
   const handleGenerate = async (currentPrompt: string) => {
     if (!currentPrompt.trim()) {
@@ -69,7 +70,7 @@ export function GeneratorTab() {
     setLoading(true);
     setGeneratedCode(null);
     try {
-      const result = await generateUiCode({ prompt: currentPrompt });
+      const result = await generateUiCode({ prompt: currentPrompt, extraInstructions });
       setGeneratedCode(result);
     } catch (error) {
       console.error(error);
@@ -96,6 +97,7 @@ export function GeneratorTab() {
     setPrompt(surprisePrompt);
     setSelectedTheme(randomTheme);
     setSelectedComponent(randomComponent);
+    setExtraInstructions("Add a simple fade-in animation to the main container.");
 
     // We pass the new prompt directly to ensure the generation uses it
     handleGenerate(surprisePrompt);
@@ -167,6 +169,19 @@ export function GeneratorTab() {
                   disabled={loading}
                 />
               </div>
+
+               <div className="grid w-full gap-1.5">
+                <Label htmlFor="extra-instructions">Animation & Styling Instructions (Optional)</Label>
+                <Textarea
+                  id="extra-instructions"
+                  placeholder="e.g., 'Animate the card with a spring effect on hover.' or 'Use a gradient of purple and blue for the background.'"
+                  value={extraInstructions}
+                  onChange={(e) => setExtraInstructions(e.target.value)}
+                  className="min-h-[80px]"
+                  disabled={loading}
+                />
+              </div>
+
               <div className="flex flex-col gap-2 sm:flex-row">
                 <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={loading}>
                   {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
@@ -222,5 +237,3 @@ export function GeneratorTab() {
     </div>
   );
 }
-
-    

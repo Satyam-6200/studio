@@ -1,3 +1,4 @@
+
 // This file is machine-generated - edit at your own risk.
 
 'use server';
@@ -16,15 +17,16 @@ import {z} from 'genkit';
 
 const GenerateUiCodeInputSchema = z.object({
   prompt: z.string().describe('A text prompt describing the desired UI layout.'),
+  extraInstructions: z.string().optional().describe('Optional instructions for animations, colors, or other styling details.'),
 });
 export type GenerateUiCodeInput = z.infer<typeof GenerateUiCodeInputSchema>;
 
 const GenerateUiCodeOutputSchema = z.object({
-  html: z.string().describe('The generated HTML code using Tailwind CSS.'),
+  html: z.string().describe('The generated HTML code using Tailwind CSS and optionally Framer Motion for animations.'),
 });
 export type GenerateUiCodeOutput = z.infer<typeof GenerateUiCodeOutputSchema>;
 
-export async function generateUiCode(input: GenerateUiCodeInput): Promise<GenerateUiCodeOutput> {
+export async function generateUiCode(input: GenerateUiCodeInput): Promise<GenerateUiCodeCodeOutput> {
   return generateUiCodeFlow(input);
 }
 
@@ -33,14 +35,23 @@ const prompt = ai.definePrompt({
   input: {schema: GenerateUiCodeInputSchema},
   output: {schema: GenerateUiCodeOutputSchema},
   model: googleAI.model('gemini-1.5-flash'),
-  prompt: `You are an AI expert in UI/UX design and Tailwind CSS.
+  prompt: `You are an AI expert in UI/UX design, Tailwind CSS, and Framer Motion.
 
   You will generate a single block of HTML code based on the user's prompt.
   The HTML should be styled using Tailwind CSS classes.
+  
+  If the user provides animation or styling instructions, apply them.
+  - For animations, use Framer Motion by adding attributes like "initial", "animate", "whileHover", etc. to the HTML tags. You CANNOT use the <motion.div> syntax, just add the props to standard HTML elements.
+  - For styling, use Tailwind CSS classes. Be creative with colors, gradients, and effects if requested.
+
   Do not include any <style> tags or separate CSS.
   Ensure the code is responsive and well-structured.
 
   Prompt: {{{prompt}}}
+
+  {{#if extraInstructions}}
+  Animation & Styling Instructions: {{{extraInstructions}}}
+  {{/if}}
 
   Return only the HTML code in the following format:
   {
