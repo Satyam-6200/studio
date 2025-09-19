@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -11,6 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { UIPreview } from '@/components/ui-preview';
 import { CodeDisplay } from '@/components/code-display';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Skeleton } from '@/components/ui/skeleton';
 
 const themes = [
   'Modern', 
@@ -193,11 +195,28 @@ export function GeneratorTab() {
         ) : generatedCode ? (
           <UIPreview html={generatedCode.html} />
         ) : (
-            <div className="flex h-full items-center justify-center bg-card">
-                <div className="text-center text-muted-foreground">
-                    <Wand2 className="mx-auto h-12 w-12" />
-                    <p className="mt-4">Your generated UI will appear here.</p>
+            <div className="flex h-full w-full items-center justify-center bg-card p-8">
+              <div className="w-full max-w-md">
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-4">
+                    <Skeleton className="h-12 w-12 rounded-full" />
+                    <div className="space-y-2">
+                      <Skeleton className="h-4 w-[250px]" />
+                      <Skeleton className="h-4 w-[200px]" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-48 w-full" />
+                  <div className="flex justify-end space-x-2">
+                    <Skeleton className="h-10 w-24" />
+                    <Skeleton className="h-10 w-24" />
+                  </div>
                 </div>
+                <div className="mt-8 text-center text-muted-foreground">
+                  <Wand2 className="mx-auto h-8 w-8" />
+                  <p className="mt-2 text-sm">Your generated UI will appear here.</p>
+                  <p className="text-xs">Describe a component or click "Surprise Me!"</p>
+                </div>
+              </div>
             </div>
         )}
       </div>
