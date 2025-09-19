@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { GenerationHistoryItem } from './generator-tab';
@@ -61,9 +62,9 @@ export function HistoryTab({ history }: HistoryTabProps) {
                    <h4 className="font-semibold mt-4 mb-2 flex items-center gap-2"><Code className="h-4 w-4" /> Generated Code</h4>
                    <CodeDisplay html={item.html} />
                 </div>
-                 <div>
+                 <div className="flex flex-col">
                     <h4 className="font-semibold mb-2">Live Preview</h4>
-                    <div className="relative min-h-[300px] rounded-lg border bg-card shadow-sm overflow-hidden">
+                    <div className="relative flex-grow min-h-[400px] rounded-lg border bg-card shadow-sm overflow-hidden">
                        <UIPreview html={item.html} />
                     </div>
                 </div>
