@@ -79,11 +79,19 @@ export function ImageTab() {
             setGeneratedImage(result.imageDataUri);
         } catch (error: any) {
             console.error(error);
-            toast({
-                variant: "destructive",
-                title: "Image Generation Failed",
-                description: "Something went wrong while generating the image. Please try again.",
-            });
+            if (error.message && error.message.includes("QUOTA_EXCEEDED")) {
+                toast({
+                    variant: "destructive",
+                    title: "Image Generation Quota Reached",
+                    description: "You have exceeded the free tier limit for image generation. Please check your billing details or try again later.",
+                });
+            } else {
+                toast({
+                    variant: "destructive",
+                    title: "Image Generation Failed",
+                    description: "Something went wrong while generating the image. Please try again.",
+                });
+            }
         } finally {
             setLoading(false);
         }
@@ -137,7 +145,7 @@ export function ImageTab() {
                             />
                             {referenceImage ? (
                                 <>
-                                    <Image src={referenceImage} alt="Reference" layout="fill" objectFit="contain" className="rounded-lg p-2" />
+                                    <Image src={referenceImage} alt="Reference" fill objectFit="contain" className="rounded-lg p-2" />
                                     <Button
                                         variant="destructive"
                                         size="icon"
@@ -180,7 +188,7 @@ export function ImageTab() {
                                 <p className="mt-4 text-muted-foreground">Generating your image...</p>
                             </div>
                         ) : generatedImage ? (
-                            <Image src={generatedImage} alt="Generated image" layout="fill" objectFit="contain" />
+                            <Image src={generatedImage} alt="Generated image" fill objectFit="contain" />
                         ) : (
                             <div className="text-center text-muted-foreground">
                                 <Sparkles className="mx-auto h-12 w-12" />

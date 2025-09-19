@@ -9,7 +9,6 @@
  */
 
 import { ai } from '@/ai/genkit';
-import { googleAI } from '@genkit-ai/googleai';
 import { z } from 'genkit';
 
 const GenerateImageInputSchema = z.object({
@@ -44,36 +43,51 @@ const generateImageFlow = ai.defineFlow(
     inputSchema: GenerateImageInputSchema,
     outputSchema: GenerateImageOutputSchema,
   },
-  async ({ prompt, referenceImageDataUri, aspectRatio }) => {
+  async ({ prompt, referenceImageDataUri }) => {
     let response;
+    
+    try {
+      if (referenceImageDataUri) {
+        // Image-to-image generation
+        response = await ai.generate({
+          model: 'googleai/gemini-2.5-flash-image-preview',
+          prompt: [
+            { media: { url: referenceImageDataUri } },
+            { text: prompt },
+          ],
+          config: {
+            responseModalities: ['TEXT', 'IMAGE'],
+          },
+        });
+      } else {
+        // Text-to-image generation
+        response = await ai.generate({
+          model: 'googleai/gemini-2.5-flash-image-preview',
+          prompt: prompt,
+          config: {
+            responseModalities: ['TEXT', 'IMAGE'],
+          }
+        });
+      }
 
-    if (referenceImageDataUri) {
-      // Image-to-image generation
-      response = await ai.generate({
-        model: 'googleai/gemini-2.5-flash-image-preview',
-        prompt: [
-          { media: { url: referenceImageDataUri } },
-          { text: prompt },
-        ],
-        config: {
-          responseModalities: ['TEXT', 'IMAGE'],
-        },
-      });
-    } else {
-      // Text-to-image generation
-      response = await ai.generate({
-        model: 'googleai/gemini-2.5-flash-image-preview',
-        prompt: prompt,
-        config: {
-          responseModalities: ['TEXT', 'IMAGE'],
+      if (!response.media || !response.media.url) {
+        throw new Error('Image generation failed to produce an image.');
+      }
+
+      return { imageDataUri: response.media.url };
+
+    } catch (error: any) {
+        console.error("Error during image generation:", error.message);
+        const errorMessage = error.message || '';
+
+        if (errorMessage.includes('429') || errorMessage.includes('quota')) {
+            throw new Error("QUOTA_EXCEEDED: The image generation quota for the free tier has been reached. Please check your plan and billing details.");
         }
-      });
-    }
+        if (errorMessage.includes('400') && errorMessage.includes('billed user')) {
+             throw new Error("QUOTA_EXCEEDED: This model is only available to billed users. Please check your project's billing status.");
+        }
 
-    if (!response.media || !response.media.url) {
-      throw new Error('Image generation failed to produce an image.');
+        throw new Error("An unexpected error occurred during image generation.");
     }
-
-    return { imageDataUri: response.media.url };
   }
 );
