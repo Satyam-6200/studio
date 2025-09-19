@@ -57,7 +57,6 @@ const generateImageFlow = ai.defineFlow(
         ],
         config: {
           responseModalities: ['TEXT', 'IMAGE'],
-          ...(aspectRatio ? { aspectRatio } : {}),
         },
       });
     } else {
@@ -67,7 +66,6 @@ const generateImageFlow = ai.defineFlow(
         prompt: prompt,
         config: {
           responseModalities: ['TEXT', 'IMAGE'],
-          ...(aspectRatio ? { aspectRatio } : {}),
         }
       });
     }
