@@ -26,16 +26,11 @@ const GenerateUiCodeOutputSchema = z.object({
 });
 export type GenerateUiCodeOutput = z.infer<typeof GenerateUiCodeOutputSchema>;
 
-export async function generateUiCode(input: GenerateUiCodeInput): Promise<GenerateUiCodeCodeOutput> {
+export async function generateUiCode(input: GenerateUiCodeInput): Promise<GenerateUiCodeOutput> {
   return generateUiCodeFlow(input);
 }
 
-const prompt = ai.definePrompt({
-  name: 'generateUiCodePrompt',
-  input: {schema: GenerateUiCodeInputSchema},
-  output: {schema: GenerateUiCodeOutputSchema},
-  model: googleAI.model('gemini-1.5-flash'),
-  prompt: `You are an AI expert in UI/UX design, Tailwind CSS, and Framer Motion.
+const basePrompt = `You are an AI expert in UI/UX design, Tailwind CSS, and Framer Motion.
 
   You will generate a single block of HTML code based on the user's prompt.
   The HTML should be styled using Tailwind CSS classes.
@@ -56,8 +51,24 @@ const prompt = ai.definePrompt({
   Return only the HTML code in the following format:
   {
     "html": "..."
-  }`,
+  }`;
+
+const prompt = ai.definePrompt({
+  name: 'generateUiCodePrompt',
+  input: {schema: GenerateUiCodeInputSchema},
+  output: {schema: GenerateUiCodeOutputSchema},
+  model: googleAI.model('gemini-1.5-flash'),
+  prompt: basePrompt,
 });
+
+const fallbackPrompt = ai.definePrompt({
+    name: 'generateUiCodeFallbackPrompt',
+    input: {schema: GenerateUiCodeInputSchema},
+    output: {schema: GenerateUiCodeOutputSchema},
+    model: googleAI.model('gemini-1.0-pro'),
+    prompt: basePrompt,
+});
+
 
 const generateUiCodeFlow = ai.defineFlow(
   {
@@ -66,7 +77,20 @@ const generateUiCodeFlow = ai.defineFlow(
     outputSchema: GenerateUiCodeOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    return output!;
+    try {
+        console.log('Attempting to generate UI with primary model...');
+        const {output} = await prompt(input);
+        return output!;
+    } catch (error: any) {
+        console.warn('Primary model failed:', error.message);
+        // If the primary model is overloaded or unavailable, try the fallback.
+        if (error.message && error.message.includes('503')) {
+            console.log('Primary model overloaded. Retrying with fallback model...');
+            const {output} = await fallbackPrompt(input);
+            return output!;
+        }
+        // If it's a different error, re-throw it.
+        throw error;
+    }
   }
 );
