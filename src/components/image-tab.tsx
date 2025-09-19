@@ -15,8 +15,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 
 const aspectRatios = [
     { value: '1:1', label: 'Square (1:1)' },
-    { value: '16:9', label: 'Landscape (16:9)' },
+    { value: '16:9', label: 'Widescreen (16:9)' },
     { value: '9:16', label: 'Portrait (9:16)' },
+    { value: '4:3', label: 'Standard (4:3)' },
+    { value: '3:4', label: 'Portrait (3:4)' },
+    { value: '3:2', label: 'Photography (3:2)' },
+    { value: '2:3', label: 'Photography (2:3)' },
+    { value: '5:4', label: 'Photo (5:4)' },
+    { value: '4:5', label: 'Photo (4:5)' },
+    { value: '2.39:1', label: 'Cinematic (2.39:1)' },
+    { value: '2:1', label: 'Cinematic (2:1)' },
 ];
 
 export function ImageTab() {
