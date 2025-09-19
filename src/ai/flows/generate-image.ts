@@ -12,7 +12,7 @@ import { ai } from '@/ai/genkit';
 import { googleAI } from '@genkit-ai/googleai';
 import { z } from 'genkit';
 
-export const GenerateImageInputSchema = z.object({
+const GenerateImageInputSchema = z.object({
   prompt: z.string().describe('A text prompt describing the image to generate.'),
   referenceImageDataUri: z
     .string()
@@ -23,7 +23,7 @@ export const GenerateImageInputSchema = z.object({
 });
 export type GenerateImageInput = z.infer<typeof GenerateImageInputSchema>;
 
-export const GenerateImageOutputSchema = z.object({
+const GenerateImageOutputSchema = z.object({
   imageDataUri: z
     .string()
     .describe(
