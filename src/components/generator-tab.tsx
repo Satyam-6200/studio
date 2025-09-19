@@ -59,7 +59,7 @@ export function GeneratorTab() {
 
   const [selectedTheme, setSelectedTheme] = useState('');
   const [selectedComponent, setSelectedComponent] = useState('');
-  const [extraInstructions, setExtraInstructions]_useState('');
+  const [extraInstructions, setExtraInstructions] = useState('');
 
   const handleGenerate = async (currentPrompt: string) => {
     if (!currentPrompt.trim()) {
