@@ -49,7 +49,19 @@ const componentTypes = [
 
 const placeholderPrompt = "A modern hero section for a SaaS startup with a title, a short paragraph, a call-to-action button, and a placeholder image on the right.";
 
-export function GeneratorTab() {
+export interface GenerationHistoryItem {
+  id: string;
+  prompt: string;
+  extraInstructions: string;
+  html: string;
+  timestamp: Date;
+}
+
+interface GeneratorTabProps {
+  onGenerate: (item: GenerationHistoryItem) => void;
+}
+
+export function GeneratorTab({ onGenerate }: GeneratorTabProps) {
   const { toast } = useToast();
   const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
@@ -61,7 +73,7 @@ export function GeneratorTab() {
   const [selectedComponent, setSelectedComponent] = useState('');
   const [extraInstructions, setExtraInstructions] = useState('');
 
-  const handleGenerate = async (currentPrompt: string) => {
+  const handleGenerate = async (currentPrompt: string, instructions: string) => {
     if (!currentPrompt.trim()) {
       toast({
         variant: "destructive",
@@ -74,9 +86,16 @@ export function GeneratorTab() {
     setGeneratedHtml(null);
     setIsEditing(false);
     try {
-      const result = await generateUiCode({ prompt: currentPrompt, extraInstructions });
+      const result = await generateUiCode({ prompt: currentPrompt, extraInstructions: instructions });
       setGeneratedHtml(result.html);
       setEditableHtml(result.html);
+      onGenerate({
+        id: new Date().toISOString(),
+        prompt: currentPrompt,
+        extraInstructions: instructions,
+        html: result.html,
+        timestamp: new Date()
+      });
     } catch (error: any) {
       console.error(error);
       const errorMessage = error.message || '';
@@ -100,20 +119,21 @@ export function GeneratorTab() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    handleGenerate(prompt);
+    handleGenerate(prompt, extraInstructions);
   };
   
   const handleSurprise = () => {
     const randomTheme = themes[Math.floor(Math.random() * themes.length)];
     const randomComponent = componentTypes[Math.floor(Math.random() * componentTypes.length)];
     const surprisePrompt = `A ${randomTheme.toLowerCase()} ${randomComponent.toLowerCase()} for a website.`;
+    const surpriseInstructions = "Add a simple fade-in animation to the main container.";
     
     setPrompt(surprisePrompt);
     setSelectedTheme(randomTheme);
     setSelectedComponent(randomComponent);
-    setExtraInstructions("Add a simple fade-in animation to the main container.");
+    setExtraInstructions(surpriseInstructions);
 
-    handleGenerate(surprisePrompt);
+    handleGenerate(surprisePrompt, surpriseInstructions);
   };
 
   useEffect(() => {

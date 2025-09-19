@@ -2,27 +2,24 @@
 
 import { AppHeader } from "@/components/app-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { GeneratorTab } from "@/components/generator-tab";
+import { GeneratorTab, GenerationHistoryItem } from "@/components/generator-tab";
 import { OptimizerTab } from "@/components/optimizer-tab";
 import { LibraryTab } from "@/components/library-tab";
-import { Wand2, Lightbulb, Library } from "lucide-react";
+import { HistoryTab } from "@/components/history-tab";
+import { Wand2, Lightbulb, Library, History } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useState } from "react";
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const [history, setHistory] = useState<GenerationHistoryItem[]>([]);
 
-  // In demo mode, we don't need to check for a user.
-  // The useAuth hook will provide a simulated user.
-  // useEffect(() => {
-  //   if (!loading && !user) {
-  //     router.push("/login");
-  //   }
-  // }, [user, loading, router]);
+  const addHistoryItem = (item: GenerationHistoryItem) => {
+    setHistory(prev => [item, ...prev]);
+  }
 
-  // A loading state can still be useful if the auth hook had async logic.
   if (loading) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-background">
@@ -39,7 +36,7 @@ export default function DashboardPage() {
       <main className="flex-grow overflow-auto p-4 sm:p-6 lg:p-8">
         <Tabs defaultValue="generator" className="h-full">
           <div className="flex justify-center">
-            <TabsList className="mb-6 grid grid-cols-3 w-full max-w-lg">
+            <TabsList className="mb-6 grid grid-cols-4 w-full max-w-2xl">
               <TabsTrigger value="generator" className="gap-2">
                 <Wand2 className="h-4 w-4" /> Generator
               </TabsTrigger>
@@ -49,16 +46,22 @@ export default function DashboardPage() {
               <TabsTrigger value="library" className="gap-2">
                 <Library className="h-4 w-4" /> Library
               </TabsTrigger>
+              <TabsTrigger value="history" className="gap-2">
+                <History className="h-4 w-4" /> History
+              </TabsTrigger>
             </TabsList>
           </div>
           <TabsContent value="generator" className="h-full">
-            <GeneratorTab />
+            <GeneratorTab onGenerate={addHistoryItem} />
           </TabsContent>
           <TabsContent value="optimizer" className="h-full">
             <OptimizerTab />
           </TabsContent>
           <TabsContent value="library" className="h-full">
             <LibraryTab />
+          </TabsContent>
+           <TabsContent value="history" className="h-full">
+            <HistoryTab history={history} />
           </TabsContent>
         </Tabs>
       </main>
