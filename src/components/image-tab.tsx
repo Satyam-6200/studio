@@ -11,6 +11,13 @@ import { useToast } from "@/hooks/use-toast";
 import { Sparkles, Loader2, UploadCloud, X } from "lucide-react";
 import Image from "next/image";
 import { generateImage } from '@/ai/flows/generate-image';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+
+const aspectRatios = [
+    { value: '1:1', label: 'Square (1:1)' },
+    { value: '16:9', label: 'Landscape (16:9)' },
+    { value: '9:16', label: 'Portrait (9:16)' },
+];
 
 export function ImageTab() {
     const { toast } = useToast();
@@ -19,6 +26,7 @@ export function ImageTab() {
     const [generatedImage, setGeneratedImage] = useState<string | null>(null);
     const [referenceImage, setReferenceImage] = useState<string | null>(null);
     const [referenceImageType, setReferenceImageType] = useState<string | null>(null);
+    const [aspectRatio, setAspectRatio] = useState('1:1');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +65,8 @@ export function ImageTab() {
         try {
             const result = await generateImage({
                 prompt,
-                referenceImageDataUri: referenceImage
+                referenceImageDataUri: referenceImage,
+                aspectRatio: aspectRatio,
             });
             setGeneratedImage(result.imageDataUri);
         } catch (error: any) {
@@ -90,6 +99,19 @@ export function ImageTab() {
                             className="min-h-[120px]"
                             disabled={loading}
                         />
+                    </div>
+                     <div className="grid w-full gap-1.5">
+                        <Label htmlFor="aspect-ratio">Aspect Ratio</Label>
+                        <Select value={aspectRatio} onValueChange={setAspectRatio} disabled={loading}>
+                            <SelectTrigger id="aspect-ratio">
+                                <SelectValue placeholder="Select an aspect ratio" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {aspectRatios.map(ratio => (
+                                    <SelectItem key={ratio.value} value={ratio.value}>{ratio.label}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                     <div className="grid w-full gap-1.5">
                         <Label>Reference Image (Optional)</Label>

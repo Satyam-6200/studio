@@ -20,6 +20,7 @@ const GenerateImageInputSchema = z.object({
     .describe(
       "An optional reference image as a data URI. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
     ),
+  aspectRatio: z.string().optional().describe('The desired aspect ratio for the generated image (e.g., "1:1", "16:9", "9:16").'),
 });
 export type GenerateImageInput = z.infer<typeof GenerateImageInputSchema>;
 
@@ -42,7 +43,7 @@ const generateImageFlow = ai.defineFlow(
     inputSchema: GenerateImageInputSchema,
     outputSchema: GenerateImageOutputSchema,
   },
-  async ({ prompt, referenceImageDataUri }) => {
+  async ({ prompt, referenceImageDataUri, aspectRatio }) => {
     let response;
 
     if (referenceImageDataUri) {
@@ -55,6 +56,7 @@ const generateImageFlow = ai.defineFlow(
         ],
         config: {
           responseModalities: ['TEXT', 'IMAGE'],
+          ...(aspectRatio ? { aspectRatio } : {}),
         },
       });
     } else {
@@ -62,6 +64,9 @@ const generateImageFlow = ai.defineFlow(
       response = await ai.generate({
         model: 'googleai/imagen-4.0-fast-generate-001',
         prompt: prompt,
+        config: {
+          ...(aspectRatio ? { aspectRatio } : {}),
+        }
       });
     }
 
