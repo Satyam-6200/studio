@@ -1,6 +1,8 @@
+
 "use client";
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import Image from "next/image";
 
 export function UiAnimation() {
   const x = useMotionValue(0);
@@ -11,7 +13,7 @@ export function UiAnimation() {
   const smoothY = useSpring(y, springConfig);
 
   const rotateX = useTransform(smoothY, [-300, 300], [20, -20]);
-  const rotateY = useTransform(smoothX, [-300, 300], [-360, 360]);
+  const rotateY = useTransform(smoothX, [-300, 300], [-20, 20]);
 
   const handleMouseMove = (event: React.MouseEvent) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -63,23 +65,32 @@ export function UiAnimation() {
         <div className="absolute inset-0 bg-grid-pattern bg-grid-pattern opacity-10 [mask-image:linear-gradient(to_bottom,transparent,black_40%,transparent)]"></div>
         
         <motion.div 
-            className="w-full h-full flex items-center justify-center"
+            className="w-full h-full flex flex-col items-center justify-center text-center"
             style={{ transformStyle: "preserve-3d" }}
         >
             <motion.div 
-                className="absolute top-8 left-8 text-left"
+                className="flex flex-col items-center"
                 style={{ transform: "translateZ(60px)" }}
             >
-                <h2 className="font-headline text-3xl font-bold">CORRECTED UI</h2>
-                <p className="text-primary text-lg">Beyond Imagination</p>
+                <Image
+                    src="https://picsum.photos/seed/aboutme/120/120"
+                    alt="Your Name"
+                    width={120}
+                    height={120}
+                    className="rounded-full border-4 border-primary/50 shadow-xl mb-4"
+                    data-ai-hint="person portrait"
+                />
+                <h2 className="font-headline text-3xl font-bold">Your Name Here</h2>
+                <p className="text-primary text-lg font-medium">Your Title or Tagline</p>
             </motion.div>
 
              <motion.div 
-                className="absolute bottom-8 right-8 text-right text-muted-foreground"
+                className="mt-6 max-w-md text-muted-foreground"
                 style={{ transform: "translateZ(40px)" }}
             >
-                <p>AI Powered UI/UX</p>
-                <p>Design & Development</p>
+                <p>
+                    This is a short bio where you can introduce yourself. Talk about your passion for design, development, or whatever makes you unique! Keep it brief and engaging.
+                </p>
             </motion.div>
         </motion.div>
       </motion.div>
