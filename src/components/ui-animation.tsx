@@ -73,7 +73,7 @@ export function UiAnimation() {
                 style={{ transform: "translateZ(60px)" }}
             >
                 <Image
-                    src="https://picsum.photos/seed/aboutme/120/120"
+                    src="/images/your-photo.png"
                     alt="Your Name"
                     width={120}
                     height={120}
