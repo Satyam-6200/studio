@@ -62,7 +62,7 @@ const prompt = ai.definePrompt({
   name: 'generateUiCodePrompt',
   input: {schema: GenerateUiCodeInputSchema},
   output: {schema: GenerateUiCodeOutputSchema},
-  model: googleAI.model('gemini-1.5-flash'),
+  model: googleAI.model('gemini-1.5-pro'),
   prompt: basePrompt,
 });
 
