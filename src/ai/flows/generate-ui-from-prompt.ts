@@ -23,6 +23,7 @@ export type GenerateUiCodeInput = z.infer<typeof GenerateUiCodeInputSchema>;
 
 const GenerateUiCodeOutputSchema = z.object({
   html: z.string().describe('The generated HTML code using Tailwind CSS and optionally Framer Motion for animations.'),
+  error: z.string().optional().describe('An error message if the generation failed.'),
 });
 export type GenerateUiCodeOutput = z.infer<typeof GenerateUiCodeOutputSchema>;
 
@@ -61,7 +62,7 @@ const basePrompt = `You are an AI expert in UI/UX design, Tailwind CSS, and Fram
 const prompt = ai.definePrompt({
   name: 'generateUiCodePrompt',
   input: {schema: GenerateUiCodeInputSchema},
-  output: {schema: GenerateUiCodeOutputSchema},
+  output: {schema: z.object({ html: z.string() })},
   model: googleAI.model('gemini-1.5-pro'),
   prompt: basePrompt,
 });
@@ -69,7 +70,7 @@ const prompt = ai.definePrompt({
 const fallbackPrompt = ai.definePrompt({
     name: 'generateUiCodeFallbackPrompt',
     input: {schema: GenerateUiCodeInputSchema},
-    output: {schema: GenerateUiCodeOutputSchema},
+    output: {schema: z.object({ html: z.string() })},
     model: googleAI.model('gemini-1.0-pro'),
     prompt: basePrompt,
 });
@@ -85,20 +86,29 @@ const generateUiCodeFlow = ai.defineFlow(
     try {
         console.log('Attempting to generate UI with primary model...');
         const {output} = await prompt(input);
-        return output!;
+        return { html: output!.html };
     } catch (error: any) {
         console.warn('Primary model failed:', error.message);
         const errorMessage = error.message || '';
 
         if (errorMessage.includes('429') || errorMessage.includes('quota')) {
-            throw new Error("QUOTA_EXCEEDED: The UI generation quota for the free tier has been reached. Please check your plan and billing details.");
+            return { html: '', error: 'QUOTA_EXCEEDED' };
         }
 
         // If the primary model is overloaded or unavailable, try the fallback.
         if (errorMessage.includes('503')) {
             console.log('Primary model overloaded. Retrying with fallback model...');
-            const {output} = await fallbackPrompt(input);
-            return output!;
+            try {
+              const {output} = await fallbackPrompt(input);
+              return { html: output!.html };
+            } catch (fallbackError: any) {
+              console.error('Fallback model also failed:', fallbackError.message);
+              const fallbackErrorMessage = fallbackError.message || '';
+              if (fallbackErrorMessage.includes('429') || fallbackErrorMessage.includes('quota')) {
+                return { html: '', error: 'QUOTA_EXCEEDED' };
+              }
+              throw fallbackError;
+            }
         }
         
         // If it's a different error, re-throw it.

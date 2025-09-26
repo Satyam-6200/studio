@@ -85,8 +85,30 @@ export function GeneratorTab({ onGenerate }: GeneratorTabProps) {
     setLoading(true);
     setGeneratedHtml(null);
     setIsEditing(false);
-    try {
-      const result = await generateUiCode({ prompt: currentPrompt, extraInstructions: instructions });
+    
+    const result = await generateUiCode({ prompt: currentPrompt, extraInstructions: instructions });
+
+    setLoading(false);
+
+    if (result.error) {
+      console.error(result.error);
+      if (result.error === 'QUOTA_EXCEEDED') {
+        toast({
+          variant: "destructive",
+          title: "UI Generation Quota Reached",
+          description: "You have exceeded the free tier limit for UI generation. Please check your billing details or try again later.",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Generation Failed",
+          description: "Something went wrong while generating the UI. Please try again.",
+        });
+      }
+      return;
+    }
+
+    if (result.html) {
       setGeneratedHtml(result.html);
       setEditableHtml(result.html);
       onGenerate({
@@ -96,30 +118,12 @@ export function GeneratorTab({ onGenerate }: GeneratorTabProps) {
         html: result.html,
         timestamp: new Date()
       });
-    } catch (error: any) {
-      console.error(error);
-      const errorMessage = error.message || '';
-      if (errorMessage.includes('QUOTA_EXCEEDED')) {
-        toast({
-          variant: "destructive",
-          title: "UI Generation Quota Reached",
-          description: "You have exceeded the free tier limit for UI generation. Please check your billing details or try again later.",
-        });
-      } else if (errorMessage.includes('503') || errorMessage.toLowerCase().includes('overloaded')) {
-        toast({
-          variant: "destructive",
-          title: "Model is Overloaded",
-          description: "The AI model is currently experiencing high demand. Please try again in a few moments.",
-        });
-      } else {
+    } else {
         toast({
           variant: "destructive",
           title: "Generation Failed",
-          description: "Something went wrong while generating the UI. Please try again.",
+          description: "The AI returned an empty response. Please try modifying your prompt.",
         });
-      }
-    } finally {
-      setLoading(false);
     }
   };
 
