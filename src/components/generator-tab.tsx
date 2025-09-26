@@ -99,7 +99,13 @@ export function GeneratorTab({ onGenerate }: GeneratorTabProps) {
     } catch (error: any) {
       console.error(error);
       const errorMessage = error.message || '';
-      if (errorMessage.includes('503') || errorMessage.toLowerCase().includes('overloaded')) {
+      if (errorMessage.includes('QUOTA_EXCEEDED')) {
+        toast({
+          variant: "destructive",
+          title: "UI Generation Quota Reached",
+          description: "You have exceeded the free tier limit for UI generation. Please check your billing details or try again later.",
+        });
+      } else if (errorMessage.includes('503') || errorMessage.toLowerCase().includes('overloaded')) {
         toast({
           variant: "destructive",
           title: "Model is Overloaded",

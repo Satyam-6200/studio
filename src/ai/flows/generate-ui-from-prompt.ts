@@ -88,12 +88,19 @@ const generateUiCodeFlow = ai.defineFlow(
         return output!;
     } catch (error: any) {
         console.warn('Primary model failed:', error.message);
+        const errorMessage = error.message || '';
+
+        if (errorMessage.includes('429') || errorMessage.includes('quota')) {
+            throw new Error("QUOTA_EXCEEDED: The UI generation quota for the free tier has been reached. Please check your plan and billing details.");
+        }
+
         // If the primary model is overloaded or unavailable, try the fallback.
-        if (error.message && error.message.includes('503')) {
+        if (errorMessage.includes('503')) {
             console.log('Primary model overloaded. Retrying with fallback model...');
             const {output} = await fallbackPrompt(input);
             return output!;
         }
+        
         // If it's a different error, re-throw it.
         throw error;
     }
