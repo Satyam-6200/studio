@@ -91,13 +91,9 @@ const generateUiCodeFlow = ai.defineFlow(
         console.warn('Primary model failed:', error.message);
         const errorMessage = error.message || '';
 
-        if (errorMessage.includes('429') || errorMessage.includes('quota')) {
-            return { html: '', error: 'QUOTA_EXCEEDED' };
-        }
-
-        // If the primary model is overloaded or unavailable, try the fallback.
-        if (errorMessage.includes('503')) {
-            console.log('Primary model overloaded. Retrying with fallback model...');
+        // If the primary model is overloaded or has hit a quota, try the fallback.
+        if (errorMessage.includes('503') || errorMessage.includes('429') || errorMessage.includes('quota')) {
+            console.log('Primary model unavailable. Retrying with fallback model...');
             try {
               const {output} = await fallbackPrompt(input);
               return { html: output!.html };
@@ -107,12 +103,13 @@ const generateUiCodeFlow = ai.defineFlow(
               if (fallbackErrorMessage.includes('429') || fallbackErrorMessage.includes('quota')) {
                 return { html: '', error: 'QUOTA_EXCEEDED' };
               }
-              throw fallbackError;
+              // For other fallback errors, we can just return the error.
+              return { html: '', error: fallbackErrorMessage };
             }
         }
         
-        // If it's a different error, re-throw it.
-        throw error;
+        // If it's a different error, return it.
+        return { html: '', error: errorMessage };
     }
   }
 );
