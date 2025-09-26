@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Sparkles, Loader2, UploadCloud, X } from "lucide-react";
+import { Sparkles, Loader2, UploadCloud, X, Wand2 } from "lucide-react";
 import Image from "next/image";
 import { generateImage } from '@/ai/flows/generate-image';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
@@ -26,6 +26,33 @@ const aspectRatios = [
     { value: '2.39:1', label: 'Cinematic (2.39:1)' },
     { value: '2:1', label: 'Cinematic (2:1)' },
 ];
+
+const surpriseMePrompts = {
+    subjects: [
+        'A majestic lion in a futuristic city',
+        'A serene forest with glowing mushrooms',
+        'A cute robot exploring a candy-filled wonderland',
+        'A mysterious castle floating in the clouds',
+        'A vintage car driving on a road made of rainbows',
+        'A spaceship landing on a vibrant, alien planet',
+        'A wizard casting a spell that creates a galaxy',
+        'A cup of coffee with a miniature world inside it',
+        'A dragon made entirely of crystal',
+        'An underwater library filled with ancient scrolls',
+    ],
+    styles: [
+        'in a photorealistic style',
+        'as a vibrant watercolor painting',
+        'in a detailed anime style',
+        'with dramatic, cinematic lighting',
+        'in a cyberpunk theme with neon lights',
+        'as a colorful and playful illustration',
+        'in a minimalist black and white line art style',
+        'as a low-poly 3D render',
+        'in the style of Van Gogh',
+        'as a retro 8-bit pixel art scene',
+    ]
+};
 
 export function ImageTab() {
     const { toast } = useToast();
@@ -57,8 +84,8 @@ export function ImageTab() {
         }
     };
 
-    const handleGenerate = async () => {
-        if (!prompt.trim()) {
+    const handleGenerate = async (currentPrompt: string) => {
+        if (!currentPrompt.trim()) {
             toast({
                 variant: "destructive",
                 title: "Prompt is empty",
@@ -72,9 +99,8 @@ export function ImageTab() {
 
         try {
             const result = await generateImage({
-                prompt,
+                prompt: currentPrompt,
                 referenceImageDataUri: referenceImage || undefined,
-                aspectRatio: aspectRatio,
             });
             setGeneratedImage(result.imageDataUri);
         } catch (error: any) {
@@ -97,6 +123,18 @@ export function ImageTab() {
         }
     };
 
+    const handleSurprise = () => {
+        const randomSubject = surpriseMePrompts.subjects[Math.floor(Math.random() * surpriseMePrompts.subjects.length)];
+        const randomStyle = surpriseMePrompts.styles[Math.floor(Math.random() * surpriseMePrompts.styles.length)];
+        const surprisePrompt = `${randomSubject}, ${randomStyle}.`;
+        
+        setPrompt(surprisePrompt);
+        setReferenceImage(null); // Clear reference image for surprise
+        if(fileInputRef.current) fileInputRef.current.value = "";
+
+        handleGenerate(surprisePrompt);
+    };
+
     return (
         <div className="grid h-full grid-cols-1 gap-8 md:grid-cols-2">
             <Card className="flex flex-col">
@@ -117,19 +155,6 @@ export function ImageTab() {
                         />
                     </div>
                      <div className="grid w-full gap-1.5">
-                        <Label htmlFor="aspect-ratio">Aspect Ratio</Label>
-                        <Select value={aspectRatio} onValueChange={setAspectRatio} disabled={loading}>
-                            <SelectTrigger id="aspect-ratio">
-                                <SelectValue placeholder="Select an aspect ratio" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {aspectRatios.map(ratio => (
-                                    <SelectItem key={ratio.value} value={ratio.value}>{ratio.label}</SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <div className="grid w-full gap-1.5">
                         <Label>Reference Image (Optional)</Label>
                         <div 
                             className="relative flex items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/50"
@@ -169,10 +194,16 @@ export function ImageTab() {
                             )}
                         </div>
                     </div>
-                     <Button onClick={handleGenerate} disabled={loading} className="w-full mt-auto bg-primary hover:bg-primary/90">
-                        {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-                        Generate Image
-                    </Button>
+                     <div className="flex flex-col gap-2 sm:flex-row mt-auto">
+                        <Button onClick={() => handleGenerate(prompt)} disabled={loading} className="w-full bg-primary hover:bg-primary/90">
+                            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                            Generate Image
+                        </Button>
+                         <Button type="button" variant="outline" className="w-full" onClick={handleSurprise} disabled={loading}>
+                            <Wand2 className="mr-2 h-4 w-4" />
+                            Surprise Me!
+                        </Button>
+                    </div>
                 </CardContent>
             </Card>
             <Card>
@@ -201,3 +232,5 @@ export function ImageTab() {
         </div>
     );
 }
+
+    
